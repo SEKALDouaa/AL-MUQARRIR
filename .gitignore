@@ -1,0 +1,22 @@
+﻿# === FRONTEND (Angular) ===
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.env
+
+# === BACKEND (Flask) ===
+backend/__pycache__/
+backend/*.pyc
+backend/venv/
+backend/.env
+
+# === Logs ===
+*.log
+
+# === IDE / Editor ===
+.vscode/
+.idea/
+
+# === OS / System ===
+.DS_Store
+Thumbs.db
