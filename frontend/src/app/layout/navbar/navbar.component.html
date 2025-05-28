@@ -1,1 +1,14 @@
-<p>navbar works!</p>
+<nav class="navbar navbar-expand-lg navbar-dark px-3" [ngStyle]="{ 'background-color': theme.navbar }">
+  <a class="navbar-brand d-flex align-items-center" href="#">
+    <img src="assets\Images\Logo (1).svg" alt="logo" class="navbar-logo me-2">
+    <span class="d-none d-md-inline fw-bold"></span>
+  </a>
+  <div class="d-flex ms-auto align-items-center gap-3">
+    <button class="btn btn-outline-light btn-sm">FR | AR</button>
+    <button class="btn btn-outline-light btn-sm">?</button>
+    <div class="search-wrapper position-relative">
+      <input type="text" placeholder="Recherche..." class="form-control form-control-sm search-box">
+      <i class="bi bi-search search-icon"></i>
+    </div>
+  </div>
+</nav>

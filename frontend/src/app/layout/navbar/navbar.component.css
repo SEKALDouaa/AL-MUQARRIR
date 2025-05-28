@@ -1,0 +1,41 @@
+.navbar-logo {
+  max-height: 40px;
+  width: auto;
+  transform: scale(6); /* Makes it appear bigger without changing layout */
+  transform-origin: left center;
+}
+.navbar {
+  background-color: #7B3131 !important;
+}
+
+.navbar .btn {
+  color: #E3D6C8;
+  border-color: #E3D6C8;
+  transition: background-color 0.3s;
+}
+
+.navbar .btn:hover {
+  background-color: #BC9D7E;
+  color: white;
+}
+
+.search-wrapper .search-box {
+  background-color: #E3D6C8;
+  color: #423629;
+  border: none;
+  padding-left: 30px;
+}
+
+.search-wrapper .search-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #423629;
+}
+
+.navbar {
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
+}

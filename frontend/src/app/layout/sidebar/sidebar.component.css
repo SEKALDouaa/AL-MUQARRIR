@@ -1,0 +1,87 @@
+.sidebar {
+  background-color: #423629;
+  color: #E3D6C8;
+  width: 250px;
+  transition: width 0.3s;
+}
+
+.sidebar.collapsed {
+  width: 70px;
+}
+
+.sidebar .nav-link {
+  color: #E3D6C8;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+  background-color: #BC9D7E !important;
+  color: white !important;
+  border-radius: 8px;
+}
+
+.sidebar .nav-link .link-text {
+  transition: opacity 0.2s, margin-left 0.2s;
+  opacity: 1;
+  margin-left: 10px;
+}
+
+.sidebar.collapsed .nav-link .link-text {
+  opacity: 0;
+  margin-left: 0;
+  pointer-events: none;
+}
+
+.sidebar .logout-link {
+  color: #ff4d4d;
+  border-top: 1px solid #7B3131;
+}
+
+.toggle-btn {
+  background: transparent;
+  border: none;
+  color: #E3D6C8; /* Light beige from your palette */
+  font-size: 1.25rem; /* Slightly bigger icon */
+  align-self: end;
+  margin-bottom: 1rem;
+  padding: 0;
+  cursor: pointer;
+}
+
+.toggle-btn:hover {
+  color: #BC9D7E; /* Highlight on hover */
+}
+
+/* Collapse-specific adjustments */
+.sidebar.collapsed {
+  width: 70px; /* Just enough for icons */
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.sidebar.collapsed .nav-link {
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  width: 100%;
+  height: 48px;
+  text-align: center;
+  border-radius: 8px;
+}
+
+
+.sidebar.collapsed .nav-link .link-text {
+  display: none;
+}
+
+.sidebar.collapsed .nav-link:hover {
+  background-color: #BC9D7E;
+  width: auto;
+  border-radius: 8px;
+}

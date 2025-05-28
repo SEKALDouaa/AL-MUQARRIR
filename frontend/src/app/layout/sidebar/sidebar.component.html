@@ -1,1 +1,44 @@
-<p>sidebar works!</p>
+
+<!-- Sidebar for medium+ screens -->
+<div
+  class="d-none d-md-flex flex-column sidebar vh-100 p-3"
+  [ngClass]="{ 'collapsed': isSidebarCollapsed }"
+>
+  <button (click)="toggleSidebar()" class="toggle-btn">
+    <i class="bi" [ngClass]="isSidebarCollapsed ? 'bi-arrow-right' : 'bi-arrow-left'"></i>
+  </button>
+  <ul class="nav flex-column flex-grow-1">
+    <li class="nav-item">
+      <a class="nav-link" href="#">
+        <i class="bi bi-speedometer2 me-2"></i>
+        <span class="link-text">Dashboard</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">
+        <i class="bi bi-mic me-2"></i>
+        <span class="link-text">Transcription</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">
+        <i class="bi bi-file-earmark-text me-2"></i>
+        <span class="link-text">Résumés</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">
+        <i class="bi bi-archive me-2"></i>
+        <span class="link-text">Transcriptions passées</span>
+      </a>
+    </li>
+  </ul>
+
+  <!-- Push logout to bottom -->
+  <div class="mt-auto">
+    <a class="nav-link logout-link" href="#">
+      <i class="bi bi-box-arrow-right me-2"></i>
+      <span class="link-text">Déconnexion</span>
+    </a>
+  </div>
+</div>

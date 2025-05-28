@@ -1,6 +1,15 @@
-<app-navbar></app-navbar>
-<app-sidebar></app-sidebar>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-<router-outlet></router-outlet>
+<div class="main-container" style="display: flex; flex-direction: column; min-height: 100vh;">
+  <app-navbar></app-navbar>
 
-<app-footer></app-footer>
+  <div style="display: flex; flex: 1;">
+    <app-sidebar></app-sidebar>
+
+    <main style="flex: 1; padding: 1rem;">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
+  <app-footer></app-footer>
+</div>
