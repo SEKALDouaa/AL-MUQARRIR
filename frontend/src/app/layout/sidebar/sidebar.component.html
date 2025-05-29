@@ -1,9 +1,7 @@
 
 <!-- Sidebar for medium+ screens -->
-<div
-  class="d-none d-md-flex flex-column sidebar vh-100 p-3"
-  [ngClass]="{ 'collapsed': isSidebarCollapsed }"
->
+<div class="d-flex flex-column sidebar min-vh-100 p-3" [ngClass]="{ 'collapsed': isSidebarCollapsed }">
+
   <button (click)="toggleSidebar()" class="toggle-btn">
     <i class="bi" [ngClass]="isSidebarCollapsed ? 'bi-arrow-right' : 'bi-arrow-left'"></i>
   </button>

@@ -1,14 +1,47 @@
 <nav class="navbar navbar-expand-lg navbar-dark px-3" [ngStyle]="{ 'background-color': theme.navbar }">
   <a class="navbar-brand d-flex align-items-center" href="#">
-    <img src="assets\Images\Logo (1).svg" alt="logo" class="navbar-logo me-2">
-    <span class="d-none d-md-inline fw-bold"></span>
+    <img src="assets/Images/Logo (1).svg" alt="logo" class="navbar-logo me-2">
   </a>
-  <div class="d-flex ms-auto align-items-center gap-3">
-    <button class="btn btn-outline-light btn-sm">FR | AR</button>
-    <button class="btn btn-outline-light btn-sm">?</button>
-    <div class="search-wrapper position-relative">
-      <input type="text" placeholder="Recherche..." class="form-control form-control-sm search-box">
-      <i class="bi bi-search search-icon"></i>
+
+  <!-- Mobile toggler (optional) -->
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarContent">
+
+    <div class="d-flex ms-auto align-items-center gap-3">
+      <div
+        class="search-container"
+        [class.expanded]="searchExpanded"
+        (click)="toggleSearch($event)"
+      >
+        <i class="bi bi-search search-icon"></i>
+        <input
+          type="text"
+          class="search-input form-control"
+          placeholder="Recherche..."
+          [class.visible]="searchExpanded"
+          (click)="$event.stopPropagation()"
+        />
+      </div>
+      <div class="lang-switch" (click)="toggleLang()">
+        <span [class.active]="currentLang === 'FR'">FR</span>
+        <span class="divider">|</span>
+        <span [class.active]="currentLang === 'AR'">AR</span>
+      </div>
+
+
+      <button
+        class="help-btn"
+        placement="bottom"
+        ngbTooltip="Aide / Informations"
+      >
+        <i class="bi bi-question-circle"></i>
+      </button>
+
+
+
     </div>
   </div>
 </nav>
