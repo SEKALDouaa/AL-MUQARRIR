@@ -1,0 +1,71 @@
+.pv-form {
+  max-width: 700px;
+  margin: auto;
+  background-color: #423629; /* chocolat */
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 10px rgba(66, 54, 41, 0.4);
+  color: #7b3131; /* texte en rougeâtre */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Titre global du formulaire en chocolat */
+.pv-form + h3,
+.container > h3 {
+  color: #423629; /* chocolat */
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+/* Labels (titres des champs) en tan */
+.pv-form label {
+  color: #bc9d7e;
+  font-weight: 600;
+}
+
+/* Inputs & Textareas en rougeâtre */
+.pv-form input.form-control,
+.pv-form textarea.form-control {
+  background-color: #7b3131; /* rougeâtre */
+  border: 2px solid #7b3131; /* bordure rougeâtre */
+  color: #e3d6c8; /* beige clair texte */
+  border-radius: 0.3rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Focus : fond et bordure tan, sans contour/ombre bleue */
+.pv-form input.form-control:focus,
+.pv-form textarea.form-control:focus {
+  border-color: #bc9d7e; /* bordure tan */
+  background-color: #bc9d7e; /* fond tan */
+  color: #423629; /* texte chocolat */
+  outline: none; /* supprime contour bleu */
+  box-shadow: none; /* supprime ombre bleue */
+}
+
+/* Bouton */
+.pv-form .btn-submit {
+  background-color: #e3d6c8; /* beige clair */
+  color: #7b3131; /* rougeâtre */
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-weight: 700;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 1rem;
+  display: block;
+  width: 100%;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+/* Hover bouton */
+.pv-form .btn-submit:hover {
+  background-color: #bc9d7e; /* tan */
+  color: #423629; /* chocolat */
+}

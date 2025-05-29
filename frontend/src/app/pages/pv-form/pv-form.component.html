@@ -1,0 +1,35 @@
+<div class="container mt-4">
+  <h3>Préparation du Procès-Verbal</h3>
+  <form (ngSubmit)="onSubmit()" #pvForm="ngForm" class="pv-form rounded shadow">
+
+    <div class="mb-3">
+      <label for="titre" class="form-label">Titre de la séance</label>
+      <input type="text" id="titre" required
+             [(ngModel)]="pv.titre" name="titre"
+             class="form-control" />
+    </div>
+
+    <div class="mb-3">
+      <label for="date" class="form-label">Date</label>
+      <input type="date" id="date" required
+             [(ngModel)]="pv.date" name="date"
+             class="form-control" />
+    </div>
+
+    <div class="mb-3">
+      <label for="participants" class="form-label">Participants</label>
+      <textarea id="participants" rows="3"
+                [(ngModel)]="pv.participants" name="participants"
+                class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="ordreDuJour" class="form-label">Ordre du jour</label>
+      <textarea id="ordreDuJour" rows="3"
+                [(ngModel)]="pv.ordreDuJour" name="ordreDuJour"
+                class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn-submit">Enregistrer</button>
+  </form>
+</div>
