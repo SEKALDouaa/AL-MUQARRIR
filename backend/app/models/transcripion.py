@@ -1,0 +1,21 @@
+from ..extensions import db
+
+class Transcription(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_email = db.Column(db.String(25), db.ForeignKey('user.email'), nullable=False)
+    titreSceance = db.Column(db.String(100), nullable=False)
+    dateSceance = db.Column(db.Date, nullable=False)
+    HeureDebut = db.Column(db.Time, nullable=False)
+    HeureFin = db.Column(db.Time, nullable=False)
+    President = db.Column(db.String(25), nullable=False)
+    Secretaire = db.Column(db.String(25), nullable=False)
+    Membres = db.Column(db.String(500), nullable=False)
+    Absents = db.Column(db.String(500), nullable=True)
+    OrdreDuJour = db.Column(db.String(500), nullable=False)
+    Deroulement = db.Column(db.Text, nullable=True)
+    DateRedaction = db.Column(db.Date, nullable=False)
+    DateProchaineRéunion = db.Column(db.Date, nullable=True)
+    PV = db.Column(db.Text, nullable=True)
+    Resume = db.Column(db.Text, nullable=True)
+    user = db.relationship('User', backref='transcriptions', lazy=True)
+    # user = db.relationship('User', backref='resume', lazy=True)
