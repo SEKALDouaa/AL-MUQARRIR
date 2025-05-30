@@ -1,0 +1,103 @@
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<div class="auth-wrapper" [class.active]="isRegisterMode" style="position: relative;">
+
+  <!-- Language Switch Button Top Right -->
+  <div class="lang-switch" style="position: absolute; top: 10px; right: 10px; z-index: 1000;">
+    <span
+      role="button"
+      tabindex="0"
+      (click)="setLang('FR')"
+      [class.active]="currentLang === 'FR'"
+      class="lang-option"
+    >
+      FR
+    </span>
+    <span class="divider">|</span>
+    <span
+      role="button"
+      tabindex="0"
+      (click)="setLang('AR')"
+      [class.active]="currentLang === 'AR'"
+      class="lang-option"
+    >
+      AR
+    </span>
+  </div>
+
+  <!-- Login Form -->
+  <div class="form-box login" *ngIf="!isRegisterMode">
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <div class="form-title">
+        <h1>Connexion</h1>
+      </div>
+      <div class="input-box">
+        <input type="email" formControlName="email" placeholder="Email" required />
+        <i class="bx bxs-envelope"></i>
+      </div>
+      <div class="input-box">
+        <input type="password" formControlName="password" placeholder="Mot de passe" required />
+        <i class="bx bxs-lock-alt"></i>
+      </div>
+      <div class="forgot-link">
+        <a href="#">Mot de passe oublié ?</a>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Connexion</button>
+    </form>
+  </div>
+
+  <!-- Register Form -->
+  <div class="form-box register" *ngIf="isRegisterMode">
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+      <div class="form-title">
+        <h1>Inscription</h1>
+      </div>
+      <div class="input-box">
+        <input type="text" formControlName="first_name" placeholder="Prénom" required />
+        <i class="bx bxs-user"></i>
+      </div>
+      <div class="input-box">
+        <input type="text" formControlName="last_name" placeholder="Nom" required />
+        <i class="bx bxs-user"></i>
+      </div>
+      <div class="input-box">
+        <input type="email" formControlName="email" placeholder="Email" required />
+        <i class="bx bxs-envelope"></i>
+      </div>
+      <div class="input-box">
+        <input type="password" formControlName="password" placeholder="Mot de passe" required />
+        <i class="bx bxs-lock-alt"></i>
+      </div>
+      <div class="input-box">
+        <input type="tel" formControlName="phone_number" placeholder="Numéro de téléphone" required />
+        <i class="bx bxs-phone"></i>
+      </div>
+      <div class="input-box">
+        <input
+          [type]="birthDateFocused ? 'date' : 'text'"
+          (focus)="birthDateFocused = true"
+          (blur)="onBlurDate()"
+          [placeholder]="birthDateFocused ? '' : 'Date de naissance'"
+          formControlName="date_of_birth"
+        />
+        <i class="bx bx-calendar"></i>
+      </div>
+      <button type="submit" class="btn btn-success w-100">Inscription</button>
+    </form>
+  </div>
+
+  <!-- Toggle Panel -->
+  <div class="toggle-box">
+    <div class="toggle-panel toggle-left" *ngIf="!isRegisterMode">
+      <img src="assets/Images/Logo (1).svg" alt="Logo" class="logo" />
+      <h1>Bon retour !</h1>
+      <p>Première fois ici ? Inscrivez-vous maintenant.</p>
+      <button class="btn btn-outline-light" (click)="toggleMode()">Inscription</button>
+    </div>
+    <div class="toggle-panel toggle-right" *ngIf="isRegisterMode">
+      <img src="assets/Images/Logo (1).svg" alt="Logo" class="logo" />
+      <h1> Bienvenue !</h1>
+      <p>Vous avez déjà un compte ?</p>
+      <button class="btn btn-outline-light" (click)="toggleMode()">Connexion</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,341 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  background: #423629; /* darkest burgundy background */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.auth-wrapper {
+  position: relative;
+  width: 850px;
+  height: 550px;
+  background: #E3D6C8; /* beige background for forms */
+  border-radius: 30px;
+  overflow: hidden;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Base form-box styling */
+.form-box {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* vertical center */
+  align-items: center;     /* horizontal center */
+  text-align: center;
+  padding: 40px;
+  background-color: #E3D6C8; /* same beige */
+  box-sizing: border-box;
+  transition: opacity 0.3s ease;
+  box-shadow: none; /* removed shadows */
+}
+
+/* Register form on the LEFT */
+.form-box.register {
+  left: 0;
+  right: auto;
+  opacity: 1;
+  visibility: visible;
+  z-index: 2;
+}
+
+/* Login form on the RIGHT */
+.form-box.login {
+  right: 0;
+  left: auto;
+  opacity: 1;
+  visibility: visible;
+  z-index: 2;
+}
+
+/* Hide the inactive form by default */
+.auth-wrapper:not(.active) .form-box.register {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.auth-wrapper.active .form-box.login {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Show active form */
+.auth-wrapper:not(.active) .form-box.login {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.auth-wrapper.active .form-box.register {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+/* Limit form width */
+.form-box form {
+  width: 100%;
+  max-width: 350px;
+}
+
+/* Input box styling */
+.input-box {
+  position: relative;
+  margin: 20px 0;
+}
+
+.input-box input {
+  width: 100%;
+  padding: 13px 50px 13px 20px;
+  background: #BC9D7E; /* lighter beige */
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  box-sizing: border-box;
+  box-shadow: none; /* removed shadows */
+  color: #423629; /* dark text */
+}
+
+.input-box input::placeholder {
+  color: #7B3131; /* burgundy placeholders */
+}
+
+.input-box i {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #7B3131; /* burgundy icon */
+}
+
+/* Buttons styling - burgundy */
+.form-box button {
+  background-color: #7B3131; /* burgundy */
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 13px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.form-box button:hover {
+  background-color: #5a2222; /* darker burgundy on hover */
+}
+
+/* Forgot password link styling */
+.forgot-link {
+  margin-bottom: 20px; /* <-- Added space between forgot link and button */
+}
+
+.forgot-link a {
+  color: #7B3131; /* burgundy */
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.forgot-link a:hover {
+  color: #5a2222; /* darker burgundy on hover */
+}
+
+/* Toggle box and background */
+.toggle-box {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.toggle-box::before {
+  content: '';
+  position: absolute;
+  left: -250%;
+  width: 300%;
+  height: 100%;
+  background: #7B3131; /* burgundy sliding background */
+  border-radius: 150px;
+  z-index: 2;
+  transition: left 1.8s ease-in-out;
+}
+
+.auth-wrapper.active .toggle-box::before {
+  left: 50%;
+}
+
+.toggle-panel {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.6s ease-in-out 1.2s, opacity 0.6s ease-in-out 1.2s;
+  pointer-events: auto;
+}
+
+/* Left toggle panel */
+.toggle-panel.toggle-left {
+  left: 0;
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Right toggle panel off screen initially */
+.toggle-panel.toggle-right {
+  right: 0;
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+/* Active states for toggle panels */
+.auth-wrapper.active .toggle-panel.toggle-left {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.auth-wrapper.active .toggle-panel.toggle-right {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.toggle-panel img {
+  width: 40%;
+  margin-bottom: 10px;
+}
+
+.toggle-panel p {
+  margin-bottom: 20px;
+}
+
+.toggle-panel .btn {
+  width: 160px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .auth-wrapper {
+    width: 100%;
+    height: auto;
+    min-height: 600px;
+    border-radius: 20px;
+  }
+
+  .form-box {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 30px 20px;
+    box-shadow: none; /* no shadow */
+    border-radius: 20px;
+    transition: none;
+  }
+
+  /* Show only the active form, hide the other */
+  .form-box.login, .form-box.register {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .auth-wrapper:not(.active) .form-box.login {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .auth-wrapper.active .form-box.register {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .form-box form {
+    max-width: 100%;
+  }
+
+  .toggle-box {
+    display: none; /* hide toggle panels on mobile */
+  }
+}
+
+.logo {
+  width: auto;
+  transform: scale(2.5); /* Makes it appear bigger without changing layout */
+}
+
+.form-box .form-title h1 {
+  color: #423629;
+  font-weight: 700;
+}
+
+/* Updated language switch styles */
+.lang-switch {
+  display: flex;
+  align-items: center;
+  background-color: #7B3131; /* burgundy background */
+  border-radius: 20px;
+  padding: 4px 12px;
+  color: #BC9D7E;
+  font-size: 0.85rem;
+  user-select: none;
+}
+
+.lang-switch .divider {
+  color: #BC9D7E;
+  margin: 0 6px;
+}
+
+.lang-option {
+  cursor: pointer;
+  transition: color 0.3s ease;
+  outline: none;
+  padding: 2px 6px;
+  border-radius: 10px;
+  background: transparent; /* no background */
+  box-shadow: none;
+  border: none;
+}
+
+/* Active language style */
+.lang-option.active {
+  color: #E3D6C8;   /* lighter beige text */
+  font-weight: bold;
+  background: transparent; /* no box or square */
+  box-shadow: none;
+  border: none;
+  outline: none !important;
+}
+
+/* Optional: keyboard accessibility */
+.lang-option:focus {
+  outline-offset: 2px;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+}
