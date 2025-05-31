@@ -1,5 +1,5 @@
 from ..extensions import ma
-from ..models.transcripion import Transcription
+from ..models.transcription import Transcription
 
 class TranscriptionSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
