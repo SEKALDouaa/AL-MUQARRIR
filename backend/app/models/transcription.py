@@ -15,6 +15,7 @@ class Transcription(db.Model):
     Deroulement = db.Column(db.Text, nullable=True)
     DateRedaction = db.Column(db.Date, nullable=False)
     DateProchaineRéunion = db.Column(db.Date, nullable=True)
+    Transcription = db.Column(db.Text, nullable=True)
     PV = db.Column(db.Text, nullable=True)
     Resume = db.Column(db.Text, nullable=True)
     user = db.relationship('User', backref='transcriptions', lazy=True)

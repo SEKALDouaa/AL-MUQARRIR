@@ -11,6 +11,8 @@ users_shema = UserSchema(many=True)
 def create():
     data = request.get_json()
     user = Create_user(data)
+    if user is None:
+        return jsonify({"message": "Email already exists"}), 400
     return user_shema.jsonify(user), 201
 
 @user_bp.route('/users/<string:user_email>', methods=['GET'])

@@ -50,3 +50,4 @@ def search():
     results = search_transcriptions(query)
     if not results:
         return jsonify({"message": "No transcriptions found"}), 404
+    return transcriptions_shema.jsonify(results), 200
