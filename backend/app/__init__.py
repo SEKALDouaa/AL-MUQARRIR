@@ -8,7 +8,7 @@ def create_app():
 
     db.init_app(app)
     ma.init_app(app)
-    cors.init_app(app)
+    cors.init_app(app, resources={r"/api/*": {"origins": "http://localhost:4200"}})
 
     app.register_blueprint(user_bp, url_prefix='/api')
 
