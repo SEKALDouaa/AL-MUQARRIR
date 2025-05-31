@@ -1,25 +1,33 @@
 import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { PvFormComponent } from './pages/pv-form/pv-form.component';
-import { AuthComponent } from './pages/auth/auth.component'; // importe ton composant
+import { AuthComponent } from './pages/auth/auth.component';
+import { LandingLayoutComponent } from './layout/landing-layout/landing-layout.component';
+import { LandingComponent } from './pages/landing/landing.component';
 
 export const routes: Routes = [
-// Route sans layout (ex: login/signup)
+// Route without layout (auth)
 { path: 'auth', component: AuthComponent },
 
-// Routes avec layout principal
+// Landing route with its own layout (navbar + footer)
 {
 path: '',
-component: MainLayoutComponent,
+component: LandingLayoutComponent,
 children: [
-{ path: 'pv', component: PvFormComponent },
-// tu peux ajouter d'autres enfants ici
+{ path: '', component: LandingComponent }
 ]
 },
 
-// Redirection par défaut
-{ path: '', redirectTo: 'auth', pathMatch: 'full' },
+// Authenticated routes with main layout
+{
+path: 'Home',
+component: MainLayoutComponent,
+children: [
+{ path: 'pv', component: PvFormComponent },
+// Add more secured routes here
+]
+},
 
-// Redirection en cas de mauvaise route
-{ path: '**', redirectTo: 'auth' }
+// Catch-all redirect
+{ path: '**', redirectTo: '' }
 ];

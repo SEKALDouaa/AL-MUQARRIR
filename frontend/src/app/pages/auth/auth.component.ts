@@ -63,7 +63,7 @@ constructor(private fb: FormBuilder, private http: HttpClient, private router: R
   if (this.loginForm.invalid) return;
 
   // Directly navigate without HTTP request
-  this.router.navigate(['/']);
+  this.router.navigate(['/Home']);
   }
 
 
