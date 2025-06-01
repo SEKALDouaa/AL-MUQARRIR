@@ -1,30 +1,32 @@
 from flask import Blueprint, request, jsonify
-from ..services.user_service import Create_user, Get_user_by_email, Get_all_users
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_jwt_extended import create_access_token
+from ..services.user_service import Create_user, Get_user_by_email
 from ..schemas.user_schema import UserSchema
 
 user_bp = Blueprint('user', __name__)
+user_schema = UserSchema()
 
-user_shema = UserSchema()
-users_shema = UserSchema(many=True)
-
-@user_bp.route('/users', methods=['POST'])
-def create():
+@user_bp.route('/register', methods=['POST'])
+def register():
     data = request.get_json()
+    # Hash the password before sending to the service
+    data['password'] = generate_password_hash(data['password'])
+
     user = Create_user(data)
     if user is None:
-        return jsonify({"message": "Email already exists"}), 400
-    return user_shema.jsonify(user), 201
+        return jsonify({"message": "User already exists"}), 400
 
-@user_bp.route('/users/<string:user_email>', methods=['GET'])
-def get_user(user_email):
-    user = Get_user_by_email(user_email)
-    if not user:
-        return jsonify({"message": "User not found"}), 404
-    return user_shema.jsonify(user)
+    return jsonify({"message": "User registered successfully"}), 201
 
-@user_bp.route('/users', methods=['GET'])
-def get_all_users():
-    users = Get_all_users()
-    if not users:
-        return jsonify({"message": "No users found"}), 404
-    return users_shema.jsonify(users)
+
+@user_bp.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    user = Get_user_by_email(data['email'])
+
+    if not user or not check_password_hash(user.password, data['password']):
+        return jsonify({"message": "Invalid email or password"}), 401
+
+    access_token = create_access_token(identity=user.email)
+    return jsonify(access_token=access_token), 200
