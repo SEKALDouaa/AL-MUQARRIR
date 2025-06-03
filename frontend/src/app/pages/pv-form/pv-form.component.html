@@ -3,31 +3,66 @@
   <form (ngSubmit)="onSubmit()" #pvForm="ngForm" class="pv-form rounded shadow">
 
     <div class="mb-3">
-      <label for="titre" class="form-label">Titre de la séance</label>
-      <input type="text" id="titre" required
-             [(ngModel)]="pv.titre" name="titre"
-             class="form-control" />
+      <label for="titreSceance" class="form-label">Titre de la séance</label>
+      <input type="text" id="titreSceance" required [(ngModel)]="pv.titreSceance" name="titreSceance" class="form-control" />
     </div>
 
     <div class="mb-3">
-      <label for="date" class="form-label">Date</label>
-      <input type="date" id="date" required
-             [(ngModel)]="pv.date" name="date"
-             class="form-control" />
+      <label for="dateSceance" class="form-label">Date</label>
+      <input type="date" id="dateSceance" required [(ngModel)]="pv.dateSceance" name="dateSceance" class="form-control" />
     </div>
 
     <div class="mb-3">
-      <label for="participants" class="form-label">Participants</label>
-      <textarea id="participants" rows="3"
-                [(ngModel)]="pv.participants" name="participants"
-                class="form-control"></textarea>
+      <label for="HeureDebut" class="form-label">Heure de début</label>
+      <input type="time" id="HeureDebut" required [(ngModel)]="pv.HeureDebut" name="HeureDebut" class="form-control" />
     </div>
 
     <div class="mb-3">
-      <label for="ordreDuJour" class="form-label">Ordre du jour</label>
-      <textarea id="ordreDuJour" rows="3"
-                [(ngModel)]="pv.ordreDuJour" name="ordreDuJour"
-                class="form-control"></textarea>
+      <label for="HeureFin" class="form-label">Heure de fin</label>
+      <input type="time" id="HeureFin" required [(ngModel)]="pv.HeureFin" name="HeureFin" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+      <label for="President" class="form-label">Président</label>
+      <input type="text" id="President" required [(ngModel)]="pv.President" name="President" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+      <label for="Secretaire" class="form-label">Secrétaire</label>
+      <input type="text" id="Secretaire" required [(ngModel)]="pv.Secretaire" name="Secretaire" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Membres présents</label>
+      <div *ngFor="let membre of pv.Membres; let i = index" class="d-flex gap-2 mb-2">
+        <input type="text" class="form-control" [(ngModel)]="pv.Membres[i]" name="membre{{i}}" />
+        <button type="button" class="btn btn-danger" (click)="removeMembre(i)" *ngIf="pv.Membres.length > 1">-</button>
+      </div>
+      <button type="button" class="btn btn-add" (click)="addMembre()">+</button>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Absents</label>
+      <div *ngFor="let absent of pv.Absents; let i = index" class="d-flex gap-2 mb-2">
+        <input type="text" class="form-control" [(ngModel)]="pv.Absents[i]" name="absent{{i}}" />
+        <button type="button" class="btn btn-danger" (click)="removeAbsent(i)" *ngIf="pv.Absents.length > 1">-</button>
+      </div>
+      <button type="button" class="btn btn-add" (click)="addAbsent()">+</button>
+    </div>
+
+    <div class="mb-3">
+      <label for="OrdreDuJour" class="form-label">Ordre du jour</label>
+      <textarea id="OrdreDuJour" rows="3" [(ngModel)]="pv.OrdreDuJour" name="OrdreDuJour" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="DateRedaction" class="form-label">Date de rédaction</label>
+      <input type="date" id="DateRedaction" required [(ngModel)]="pv.DateRedaction" name="DateRedaction" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+      <label for="DateProchaineReunion" class="form-label">Date de la prochaine réunion</label>
+      <input type="date" id="DateProchaineReunion" [(ngModel)]="pv.DateProchaineReunion" name="DateProchaineReunion" class="form-control" />
     </div>
 
     <button type="submit" class="btn-submit">Enregistrer</button>

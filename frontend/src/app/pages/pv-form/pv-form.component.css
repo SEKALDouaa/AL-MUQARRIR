@@ -1,34 +1,31 @@
 .pv-form {
   max-width: 700px;
   margin: auto;
-  background-color: #423629; /* chocolat */
+  background-color: #423629;
   padding: 2rem;
   border-radius: 0.5rem;
   box-shadow: 0 0 10px rgba(66, 54, 41, 0.4);
-  color: #7b3131; /* texte en rougeâtre */
+  color: #7b3131;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Titre global du formulaire en chocolat */
 .pv-form + h3,
 .container > h3 {
-  color: #423629; /* chocolat */
+  color: #423629;
   font-weight: 700;
   margin-bottom: 1.5rem;
 }
 
-/* Labels (titres des champs) en tan */
 .pv-form label {
   color: #bc9d7e;
   font-weight: 600;
 }
 
-/* Inputs & Textareas en rougeâtre */
 .pv-form input.form-control,
 .pv-form textarea.form-control {
-  background-color: #7b3131; /* rougeâtre */
-  border: 2px solid #7b3131; /* bordure rougeâtre */
-  color: #e3d6c8; /* beige clair texte */
+  background-color: #7b3131;
+  border: 2px solid #7b3131;
+  color: #e3d6c8;
   border-radius: 0.3rem;
   padding: 0.5rem;
   font-size: 1rem;
@@ -37,20 +34,18 @@
   transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
-/* Focus : fond et bordure tan, sans contour/ombre bleue */
 .pv-form input.form-control:focus,
 .pv-form textarea.form-control:focus {
-  border-color: #bc9d7e; /* bordure tan */
-  background-color: #bc9d7e; /* fond tan */
-  color: #423629; /* texte chocolat */
-  outline: none; /* supprime contour bleu */
-  box-shadow: none; /* supprime ombre bleue */
+  border-color: #bc9d7e;
+  background-color: #bc9d7e;
+  color: #423629;
+  outline: none;
+  box-shadow: none;
 }
 
-/* Bouton */
 .pv-form .btn-submit {
-  background-color: #e3d6c8; /* beige clair */
-  color: #7b3131; /* rougeâtre */
+  background-color: #e3d6c8;
+  color: #7b3131;
   border: none;
   padding: 0.6rem 1.2rem;
   font-weight: 700;
@@ -64,8 +59,28 @@
   font-size: 1rem;
 }
 
-/* Hover bouton */
 .pv-form .btn-submit:hover {
-  background-color: #bc9d7e; /* tan */
-  color: #423629; /* chocolat */
+  background-color: #bc9d7e;
+  color: #423629;
+}
+
+.btn.btn-add {
+  background-color: transparent;
+  color: #bc9d7e;
+  font-size: 1.4rem;
+  font-weight: bold;
+  border: 2px solid #bc9d7e;
+  border-radius: 25%;
+  width: 2.2rem;
+  height: 2.2rem;
+  line-height: 1rem;
+  text-align: center;
+  padding: 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn.btn-add:hover {
+  background-color: #bc9d7e;
+  color: #423629;
 }

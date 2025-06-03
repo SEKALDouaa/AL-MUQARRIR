@@ -4,6 +4,8 @@ from .routes.user_routes import user_bp
 from .routes.transcription_routes import transcription_bp
 from flask_jwt_extended import JWTManager
 
+jwt = JWTManager()
+
 def create_app():
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
@@ -12,6 +14,7 @@ def create_app():
     db.init_app(app)
     ma.init_app(app)
     cors.init_app(app, resources={r"/api/*": {"origins": "http://localhost:4200"}})
+    jwt.init_app(app)
 
     app.register_blueprint(user_bp, url_prefix='/api')
     app.register_blueprint(transcription_bp, url_prefix='/api')

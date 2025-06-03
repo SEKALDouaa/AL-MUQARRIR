@@ -4,6 +4,9 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth/auth.service';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
 selector: 'app-auth',
@@ -20,25 +23,30 @@ export class AuthComponent {
 isRegisterMode = false;
 birthDateFocused = false;
 currentLang = 'FR';
+loginMode: boolean = true;
 
 loginForm: FormGroup;
 registerForm: FormGroup;
 
 toastMessages: { type: string; text: string }[] = [];
 
-constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {
+constructor(  private fb: FormBuilder,
+              private router: Router,
+              private http: HttpClient,
+              private toastr: ToastrService,
+              private authService: AuthService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
 
     this.registerForm = this.fb.group({
-      first_name: ['', Validators.required],
-      last_name: ['', Validators.required],
+      prenom: ['', Validators.required],
+      nom: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-      phone_number: ['', Validators.required],
-      date_of_birth: ['', Validators.required],
+      numeroTel: ['', Validators.required],
+      dateNaissance: ['', Validators.required],
     });
   }
 
@@ -60,20 +68,23 @@ constructor(private fb: FormBuilder, private http: HttpClient, private router: R
   }
 
   onLogin() {
-  if (this.loginForm.invalid) return;
-
-  // Directly navigate without HTTP request
-  this.router.navigate(['/Home']);
+    this.authService.login(this.loginForm.value).subscribe({
+      next: (res) => {
+        localStorage.setItem('token', res.access_token);
+        this.router.navigate(['/Home']);
+      },
+      error: (err) => {
+        this.showToast('error', err.error?.error || 'Login failed');
+      }
+    });
   }
 
 
   onRegister() {
-    if (this.registerForm.invalid) return;
-
-    this.http.post('/signup', this.registerForm.value).subscribe({
+    this.authService.register(this.registerForm.value).subscribe({
       next: () => {
-        this.showToast('success', 'Account created successfully. Please login.');
-        this.toggleMode();
+        this.showToast('success', 'Account created successfully!');
+        this.loginMode = true;
       },
       error: (err) => {
         this.showToast('error', err.error?.error || 'Signup failed');
@@ -82,7 +93,10 @@ constructor(private fb: FormBuilder, private http: HttpClient, private router: R
   }
 
   showToast(type: string, text: string) {
-    this.toastMessages.push({ type, text });
-    setTimeout(() => this.toastMessages.shift(), 3000);
+  if (type === 'success') {
+    this.toastr.success(text);
+  } else if (type === 'error') {
+    this.toastr.error(text);
   }
+}
 }
