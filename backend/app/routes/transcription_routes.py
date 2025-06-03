@@ -2,7 +2,8 @@ from flask import Blueprint, request, jsonify
 from ..services.transcription_service import create_transcription, get_transcription_by_id, get_all_transcriptions, delete_transcription, update_transcription, search_transcriptions
 from ..schemas.transcription_schema import TranscriptionSchema
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from ..services.transcription_service import create_transcription_with_deroulement
+from ..services.transcription_service import update_transcription_with_deroulement, update_transcription_with_analysis
+
 transcription_bp = Blueprint('transcription', __name__)
 
 transcription_shema = TranscriptionSchema()
@@ -75,16 +76,24 @@ def search():
         return jsonify({"message": "No transcriptions found"}), 404
     return transcriptions_shema.jsonify(results), 200
 
-@transcription_bp.route('/transcriptions/ai', methods=['POST'])
+@transcription_bp.route('/transcriptions/<int:transcription_id>/deroulement', methods=['POST'])
 @jwt_required()
-def generate_deroulement_ai():
-    current_user = get_jwt_identity()
-    data = request.get_json()
-
+def generate_deroulement_ai(transcription_id):
     try:
-        transcription = create_transcription_with_deroulement(data, current_user)
-        return transcription_shema.jsonify(transcription), 201
+        transcription = update_transcription_with_deroulement(transcription_id)
+        return transcription_shema.jsonify(transcription), 200
     except ValueError as ve:
-        return jsonify({"message": str(ve)}), 400
+        return jsonify({"message": str(ve)}), 404
+    except Exception as e:
+        return jsonify({"message": "AI generation failed", "error": str(e)}), 500
+
+@transcription_bp.route('/transcriptions/<int:transcription_id>/analyse', methods=['POST'])
+@jwt_required()
+def generate_analyse_ai(transcription_id):
+    try:
+        transcription = update_transcription_with_analysis(transcription_id)
+        return transcription_shema.jsonify(transcription), 200
+    except ValueError as ve:
+        return jsonify({"message": str(ve)}), 404
     except Exception as e:
         return jsonify({"message": "AI generation failed", "error": str(e)}), 500

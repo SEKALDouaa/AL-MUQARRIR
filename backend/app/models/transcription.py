@@ -18,5 +18,6 @@ class Transcription(db.Model):
     Transcription = db.Column(db.Text, nullable=True)
     PV = db.Column(db.Text, nullable=True)
     Resume = db.Column(db.Text, nullable=True)
+    Analyse = db.Column(db.Text, nullable=True)
     user = db.relationship('User', backref='transcriptions', lazy=True)
     # user = db.relationship('User', backref='resume', lazy=True)

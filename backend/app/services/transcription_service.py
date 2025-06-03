@@ -2,7 +2,7 @@ from ..models.transcription import Transcription
 from sqlalchemy import or_
 from ..extensions import db
 from datetime import datetime
-from ..services.ai_services import generate_deroulement
+from ..services.ai_services import generate_deroulement, analyze_transcription
 
 
 def create_transcription(data):
@@ -80,32 +80,28 @@ def search_transcriptions(query):
     ).all()
     return results
 
-def create_transcription_with_deroulement(data, user_email):
-    if 'Transcription' not in data:
-        raise ValueError("Missing raw transcription text")
+def update_transcription_with_deroulement(transcription_id: int) -> Transcription:
+    transcription = Transcription.query.get(transcription_id)
+    if not transcription:
+        raise ValueError("Transcription not found.")
+    
+    if not transcription.Transcription:
+        raise ValueError("Transcription text is missing.")
 
-    deroulement_text = generate_deroulement(data['Transcription'])
-
-    transcription = Transcription(
-        user_email=user_email,
-        titreSceance=data.get("titreSceance", "Titre par défaut"),
-        dateSceance=datetime.strptime(data["dateSceance"], "%Y-%m-%d").date(),
-        HeureDebut=datetime.strptime(data["HeureDebut"], "%H:%M").time(),
-        HeureFin=datetime.strptime(data["HeureFin"], "%H:%M").time(),
-        President=data["President"],
-        Secretaire=data["Secretaire"],
-        Membres=data["Membres"],
-        Absents=data.get("Absents"),
-        OrdreDuJour=data["OrdreDuJour"],
-        Deroulement=deroulement_text,
-        DateRedaction=datetime.strptime(data["DateRedaction"], "%Y-%m-%d").date(),
-        DateProchaineRéunion=datetime.strptime(data.get("DateProchaineRéunion", ""), "%Y-%m-%d").date() if data.get("DateProchaineRéunion") else None,
-        Transcription=data["Transcription"],
-        PV=data.get("PV"),
-        Resume=data.get("Resume")
-    )
-
-    db.session.add(transcription)
+    deroulement = generate_deroulement(transcription.Transcription)
+    transcription.Deroulement = deroulement
     db.session.commit()
+    return transcription
 
+def update_transcription_with_analysis(transcription_id: int) -> Transcription:
+    transcription = Transcription.query.get(transcription_id)
+    if not transcription:
+        raise ValueError("Transcription not found.")
+    
+    if not transcription.Transcription:
+        raise ValueError("Transcription text is missing.")
+
+    analysis = analyze_transcription(transcription.Transcription)
+    transcription.Analyse = analysis
+    db.session.commit()
     return transcription
