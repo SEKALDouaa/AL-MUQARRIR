@@ -10,10 +10,10 @@ def create_transcription(data):
     data['dateSceance'] = datetime.strptime(data['dateSceance'], "%Y-%m-%d").date()
     data['DateRedaction'] = datetime.strptime(data['DateRedaction'], "%Y-%m-%d").date()
 
-    if data.get('DateProchaineRéunion'):
-        data['DateProchaineRéunion'] = datetime.strptime(data['DateProchaineRéunion'], "%Y-%m-%d").date()
+    if data.get('DateProchaineReunion'):
+        data['DateProchaineReunion'] = datetime.strptime(data['DateProchaineReunion'], "%Y-%m-%d").date()
     else:
-        data['DateProchaineRéunion'] = None
+        data['DateProchaineReunion'] = None
 
     # Convert time strings to time objects
     data['HeureDebut'] = datetime.strptime(data['HeureDebut'], "%H:%M:%S").time()
@@ -54,8 +54,8 @@ def update_transcription(transcription_id, data):
         data['dateSceance'] = datetime.strptime(data['dateSceance'], "%Y-%m-%d").date()
     if 'DateRedaction' in data:
         data['DateRedaction'] = datetime.strptime(data['DateRedaction'], "%Y-%m-%d").date()
-    if 'DateProchaineRéunion' in data and data['DateProchaineRéunion'] is not None:
-        data['DateProchaineRéunion'] = datetime.strptime(data['DateProchaineRéunion'], "%Y-%m-%d").date()
+    if 'DateProchaineReunion' in data and data['DateProchaineReunion'] is not None:
+        data['DateProchaineReunion'] = datetime.strptime(data['DateProchaineReunion'], "%Y-%m-%d").date()
     
     if 'HeureDebut' in data:
         data['HeureDebut'] = datetime.strptime(data['HeureDebut'], "%H:%M:%S").time()

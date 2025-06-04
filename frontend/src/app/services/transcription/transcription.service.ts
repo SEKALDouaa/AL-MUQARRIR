@@ -1,0 +1,71 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Transcription } from '../../models/transcription.model';
+
+@Injectable({
+providedIn: 'root'
+})
+export class TranscriptionService {
+private apiBase = 'http://localhost:5000/api/transcriptions';
+
+constructor(private http: HttpClient) {}
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('access_token');
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+  }
+
+  createTranscription(data: any): Observable<Transcription> {
+    return this.http.post<Transcription>(this.apiBase, data, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  getTranscriptionById(id: number): Observable<Transcription> {
+    return this.http.get<Transcription>(`${this.apiBase}/${id}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  getAllTranscriptions(): Observable<Transcription[]> {
+    return this.http.get<Transcription[]>(this.apiBase, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  updateTranscription(id: number, data: any): Observable<Transcription> {
+    return this.http.put<Transcription>(`${this.apiBase}/${id}`, data, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  deleteTranscription(id: number): Observable<any> {
+    return this.http.delete(`${this.apiBase}/${id}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  searchTranscriptions(query: string): Observable<Transcription[]> {
+    const params = new HttpParams().set('query', query);
+    return this.http.get<Transcription[]>(`${this.apiBase}/search`, {
+      headers: this.getAuthHeaders(),
+      params: params
+    });
+  }
+
+  generateDeroulement(transcriptionId: number): Observable<Transcription> {
+    return this.http.post<Transcription>(`${this.apiBase}/${transcriptionId}/deroulement`, {}, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  generateAnalyse(transcriptionId: number): Observable<Transcription> {
+    return this.http.post<Transcription>(`${this.apiBase}/${transcriptionId}/analyse`, {}, {
+      headers: this.getAuthHeaders()
+    });
+  }
+}

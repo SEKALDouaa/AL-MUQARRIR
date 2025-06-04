@@ -14,7 +14,7 @@ class Transcription(db.Model):
     OrdreDuJour = db.Column(db.String(500), nullable=False)
     Deroulement = db.Column(db.Text, nullable=True)
     DateRedaction = db.Column(db.Date, nullable=False)
-    DateProchaineRéunion = db.Column(db.Date, nullable=True)
+    DateProchaineReunion = db.Column(db.Date, nullable=True)
     Transcription = db.Column(db.Text, nullable=True)
     PV = db.Column(db.Text, nullable=True)
     Resume = db.Column(db.Text, nullable=True)

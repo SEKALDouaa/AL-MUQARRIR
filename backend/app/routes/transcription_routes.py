@@ -16,6 +16,7 @@ def create():
     if not current_user:
         return jsonify({"message": "User not authenticated"}), 401
     data = request.get_json()
+    data['user_email'] = get_jwt_identity()
     transcription = create_transcription(data)
     return transcription_shema.jsonify(transcription), 201
 

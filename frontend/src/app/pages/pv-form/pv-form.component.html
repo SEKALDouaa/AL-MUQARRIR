@@ -34,20 +34,20 @@
 
     <div class="mb-3">
       <label class="form-label">Membres présents</label>
-      <div *ngFor="let membre of pv.Membres; let i = index" class="d-flex gap-2 mb-2">
-        <input type="text" class="form-control" [(ngModel)]="pv.Membres[i]" name="membre{{i}}" />
+      <div *ngFor="let membre of pv.Membres; let i = index; trackBy: trackByIndex" class="d-flex gap-2 mb-2">
+        <input type="text" class="form-control" [(ngModel)]="pv.Membres[i]" [name]="'membre' + i" />
         <button type="button" class="btn btn-danger" (click)="removeMembre(i)" *ngIf="pv.Membres.length > 1">-</button>
       </div>
-      <button type="button" class="btn btn-add" (click)="addMembre()">+</button>
+      <button type="button" class="btn btn-add btn-primary" (click)="addMembre()">+</button>
     </div>
 
     <div class="mb-3">
       <label class="form-label">Absents</label>
-      <div *ngFor="let absent of pv.Absents; let i = index" class="d-flex gap-2 mb-2">
-        <input type="text" class="form-control" [(ngModel)]="pv.Absents[i]" name="absent{{i}}" />
+      <div *ngFor="let absent of pv.Absents; let i = index; trackBy: trackByIndex" class="d-flex gap-2 mb-2">
+        <input type="text" class="form-control" [(ngModel)]="pv.Absents[i]" [name]="'absent' + i" />
         <button type="button" class="btn btn-danger" (click)="removeAbsent(i)" *ngIf="pv.Absents.length > 1">-</button>
       </div>
-      <button type="button" class="btn btn-add" (click)="addAbsent()">+</button>
+      <button type="button" class="btn btn-add btn-primary" (click)="addAbsent()">+</button>
     </div>
 
     <div class="mb-3">
@@ -65,6 +65,6 @@
       <input type="date" id="DateProchaineReunion" [(ngModel)]="pv.DateProchaineReunion" name="DateProchaineReunion" class="form-control" />
     </div>
 
-    <button type="submit" class="btn-submit">Enregistrer</button>
+    <button type="submit" class="btn btn-submit">Enregistrer</button>
   </form>
 </div>
