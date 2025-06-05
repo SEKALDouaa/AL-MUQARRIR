@@ -4,6 +4,9 @@ import { PvFormComponent } from './pages/pv-form/pv-form.component';
 import { AuthComponent } from './pages/auth/auth.component';
 import { LandingLayoutComponent } from './layout/landing-layout/landing-layout.component';
 import { LandingComponent } from './pages/landing/landing.component';
+import { AnalysisListComponent } from './features/analyses/analysis-list/analysis-list.component'
+import { PvListComponent } from './features/pv/pv-list/pv-list.component'
+import { TranscriptionListComponent } from './features/transcriptions/transcription-list/transcription-list.component'
 
 export const routes: Routes = [
 // Route without layout (auth)
@@ -24,8 +27,9 @@ path: 'Home',
 component: MainLayoutComponent,
 children: [
 { path: 'pv-form', component: PvFormComponent },
-// Add more secured routes here
-]
+{ path: 'analysis-list', component: AnalysisListComponent },
+{ path: 'pv-list', component: PvListComponent },
+{ path: 'transcriptions-list', component: TranscriptionListComponent },]
 },
 
 // Catch-all redirect
