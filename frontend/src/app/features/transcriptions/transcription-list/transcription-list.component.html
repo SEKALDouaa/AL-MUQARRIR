@@ -1,1 +1,20 @@
-<p>transcription-list works!</p>
+<div class="table-responsive p-3">
+  <table class="table table-dark table-hover text-light">
+    <thead style="background-color: #7B3131;">
+    <tr>
+      <th>Titre</th>
+      <th>Date</th>
+      <th>Président</th>
+      <th>Sécretaire</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let t of transcriptions" (click)="goToDetails(t.id)" style="cursor: pointer;">
+      <td>{{ t.titreSceance }}</td>
+      <td>{{ t.dateSceance }}</td>
+      <td>{{ t.President }}</td>
+      <td>{{ t.Secretaire }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
