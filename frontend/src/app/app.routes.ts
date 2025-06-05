@@ -23,7 +23,7 @@ children: [
 path: 'Home',
 component: MainLayoutComponent,
 children: [
-{ path: 'pv', component: PvFormComponent },
+{ path: 'pv-form', component: PvFormComponent },
 // Add more secured routes here
 ]
 },
