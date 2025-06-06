@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Transcription } from '../../models/transcription.model';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable({
 providedIn: 'root'
@@ -9,10 +10,11 @@ providedIn: 'root'
 export class TranscriptionService {
 private apiBase = 'http://localhost:5000/api/transcriptions';
 
-constructor(private http: HttpClient) {}
+constructor(private http: HttpClient, private storageService: StorageService
+) {}
 
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('access_token');
+    const token = this.storageService.get('access_token');
     return new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'

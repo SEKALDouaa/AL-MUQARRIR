@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { StorageService } from '../../services/storage/storage.service';
+
 
 @Component({
 selector: 'app-auth',
@@ -32,7 +34,8 @@ constructor(
     private router: Router,
     private http: HttpClient,
     private toastr: ToastrService,
-    private authService: AuthService
+    private authService: AuthService,
+    private storageService: StorageService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -56,7 +59,7 @@ constructor(
   onLogin() {
     this.authService.login(this.loginForm.value).subscribe({
       next: (res) => {
-        localStorage.setItem('access_token', res.access_token); // ✅ FIXED
+        this.storageService.set('access_token', res.access_token);
         this.router.navigate(['/Home']);
       },
       error: (err) => {
