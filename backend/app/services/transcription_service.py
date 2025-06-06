@@ -30,11 +30,11 @@ def get_transcription_by_id(transcription_id):
         return None
     return transcription
 
-def get_all_transcriptions():
-    transcriptions = Transcription.query.all()
-    if not transcriptions:
-        return None
-    return transcriptions
+def get_all_transcriptions(user_email=None):
+    if user_email:
+        return Transcription.query.filter_by(user_email=user_email).all()
+    else:
+        return Transcription.query.all()
 
 def delete_transcription(transcription_id):
     transcription = Transcription.query.get(transcription_id)

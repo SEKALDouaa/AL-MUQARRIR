@@ -15,6 +15,7 @@ constructor(private http: HttpClient, private storageService: StorageService
 
   private getAuthHeaders(): HttpHeaders {
     const token = this.storageService.get('access_token');
+    console.log('JWT token used:', token);  // <== pour debug
     return new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'

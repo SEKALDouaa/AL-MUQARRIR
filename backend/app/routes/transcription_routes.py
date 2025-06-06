@@ -4,7 +4,7 @@ from ..schemas.transcription_schema import TranscriptionSchema
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..services.transcription_service import update_transcription_with_deroulement, update_transcription_with_analysis
 
-transcription_bp = Blueprint('transcription', __name__)
+transcription_bp = Blueprint('transcription_bp', __name__)
 
 transcription_shema = TranscriptionSchema()
 transcriptions_shema = TranscriptionSchema(many=True)
