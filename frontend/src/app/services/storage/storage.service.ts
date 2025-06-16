@@ -5,28 +5,28 @@ providedIn: 'root'
 })
 export class StorageService {
 
-set(key: string, value: string): void {
+  set(key: string, value: string): void {
     if (typeof window !== 'undefined') {
-      localStorage.setItem(key, value);
+      sessionStorage.setItem(key, value);
     }
   }
 
   get(key: string): string | null {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem(key);
+      return sessionStorage.getItem(key);
     }
     return null;
   }
 
   remove(key: string): void {
     if (typeof window !== 'undefined') {
-      localStorage.removeItem(key);
+      sessionStorage.removeItem(key);
     }
   }
 
   clear(): void {
     if (typeof window !== 'undefined') {
-      localStorage.clear();
+      sessionStorage.clear();
     }
   }
 }
