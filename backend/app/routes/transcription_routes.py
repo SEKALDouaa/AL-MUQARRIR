@@ -34,6 +34,7 @@ def get(transcription_id):
 @transcription_bp.route('/transcriptions', methods=['GET'])
 @jwt_required()
 def get_all():
+    print("Headers:", request.headers)
     current_user = get_jwt_identity()
     if not current_user:
         return jsonify({"message": "User not authenticated"}), 401
@@ -51,7 +52,7 @@ def delete(transcription_id):
     transcription = delete_transcription(transcription_id)
     if transcription is None:
         return jsonify({"message": "Transcription not found"}), 404
-    return transcription_shema.jsonify(transcription), 204
+    return '', 204
 
 @transcription_bp.route('/transcriptions/<int:transcription_id>', methods=['PUT'])
 @jwt_required()
@@ -98,3 +99,8 @@ def generate_analyse_ai(transcription_id):
         return jsonify({"message": str(ve)}), 404
     except Exception as e:
         return jsonify({"message": "AI generation failed", "error": str(e)}), 500
+    
+@transcription_bp.route('/debug-transcriptions', methods=['GET'])
+def debug_headers():
+    print("DEBUG Headers:", request.headers)
+    return jsonify({"message": "Headers received"}), 200

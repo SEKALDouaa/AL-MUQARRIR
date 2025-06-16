@@ -13,7 +13,7 @@ def create_app():
 
     db.init_app(app)
     ma.init_app(app)
-    cors.init_app(app, resources={r"/api/*": {"origins": "http://localhost:4200"}})
+    cors.init_app(app, resources={r"/api/*": {"origins": "http://localhost:4200"}}, supports_credentials=True)
     jwt.init_app(app)
 
     app.register_blueprint(user_bp, url_prefix='/api')
