@@ -1,0 +1,47 @@
+.transcriptions-table-container {
+  background-color: #423629;
+  color: #e3d6c8;
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 0 10px rgba(66, 54, 41, 0.5);
+}
+
+.table-title {
+  color: #BC9D7E;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #7B3131;
+  color: #E3D6C8;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.custom-table thead {
+  background-color: #BC9D7E;
+  color: #423629;
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 0.75rem 1rem;
+  border: none;
+}
+
+.custom-table tbody tr {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.custom-table tbody tr:hover {
+  background-color: #E3D6C8;
+  color: #7B3131;
+  cursor: pointer;
+}

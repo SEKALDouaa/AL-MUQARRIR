@@ -1,1 +1,23 @@
-z
+<div class="transcriptions-table-container p-3 rounded shadow">
+  <h3 class="table-title">Liste des Analyses</h3>
+  <div class="table-responsive">
+    <table class="table custom-table table-hover">
+      <thead>
+      <tr>
+        <th>Titre</th>
+        <th>Date</th>
+        <th>Président</th>
+        <th>Secrétaire</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let t of transcriptions" (click)="goToDetails(t.id)">
+        <td>{{ t.titreSceance }}</td>
+        <td>{{ t.dateSceance }}</td>
+        <td>{{ t.President }}</td>
+        <td>{{ t.Secretaire }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
