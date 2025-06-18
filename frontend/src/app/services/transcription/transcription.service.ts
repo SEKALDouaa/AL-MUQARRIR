@@ -71,4 +71,33 @@ constructor(private http: HttpClient, private storageService: StorageService
       headers: this.getAuthHeaders()
     });
   }
+
+  exportPvDocx(transcriptionId: number): Observable<Blob> {
+    return this.http.get(`${this.apiBase}/${transcriptionId}/export/pv/docx`, {
+      headers: this.getAuthHeaders(),
+      responseType: 'blob'
+    });
+  }
+
+  exportPvPdf(transcriptionId: number): Observable<Blob> {
+    return this.http.get(`${this.apiBase}/${transcriptionId}/export/pv/pdf`, {
+      headers: this.getAuthHeaders(),
+      responseType: 'blob'
+    });
+  }
+
+  exportAnalysisDocx(transcriptionId: number): Observable<Blob> {
+    return this.http.get(`${this.apiBase}/${transcriptionId}/export/analysis/docx`, {
+      headers: this.getAuthHeaders(),
+      responseType: 'blob'
+    });
+  }
+
+  exportAnalysisPdf(transcriptionId: number): Observable<Blob> {
+    return this.http.get(`${this.apiBase}/${transcriptionId}/export/analysis/pdf`, {
+      headers: this.getAuthHeaders(),
+      responseType: 'blob'
+    });
+  }
+
 }
