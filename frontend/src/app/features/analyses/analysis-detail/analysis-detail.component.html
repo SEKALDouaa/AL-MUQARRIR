@@ -1,1 +1,18 @@
-<p>analysis-detail works!</p>
+<div class="container p-4" *ngIf="transcription">
+  <h2 class="mb-3 text-start">{{ transcription.titreSceance }}</h2>
+  <h4 class="text-muted text-start">{{ title }}</h4>
+
+  <textarea
+    class="form-control mb-4"
+    [(ngModel)]="editableContent"
+    rows="20"
+    dir="rtl"
+    style="white-space: pre-wrap; font-family: 'Amiri', serif; text-align: right;"
+  ></textarea>
+
+  <div class="text-center mt-3">
+    <button class="custom-btn me-2" (click)="save()">Enregistrer</button>
+    <button class="custom-btn me-2" (click)="exportPdf()">Exporter PDF</button>
+    <button class="custom-btn" (click)="exportDocx()">Exporter DOCX</button>
+  </div>
+</div>

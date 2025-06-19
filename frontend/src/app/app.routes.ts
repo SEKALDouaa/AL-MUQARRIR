@@ -7,6 +7,9 @@ import { LandingComponent } from './pages/landing/landing.component';
 import { AnalysisListComponent } from './features/analyses/analysis-list/analysis-list.component'
 import { PvListComponent } from './features/pv/pv-list/pv-list.component'
 import { TranscriptionListComponent } from './features/transcriptions/transcription-list/transcription-list.component'
+import { TranscriptionDetailComponent } from './features/transcriptions/transcription-detail/transcription-detail.component'
+import { AnalysisDetailComponent } from './features/analyses/analysis-detail/analysis-detail.component'
+import { PvDetailComponent } from './features/pv/pv-detail/pv-detail.component'
 
 export const routes: Routes = [
 // Route without layout (auth)
@@ -29,7 +32,11 @@ children: [
 { path: 'pv-form', component: PvFormComponent },
 { path: 'analysis-list', component: AnalysisListComponent },
 { path: 'pv-list', component: PvListComponent },
-{ path: 'transcriptions-list', component: TranscriptionListComponent },]
+{ path: 'transcriptions-list', component: TranscriptionListComponent },
+{ path: 'transcriptions-detail/:id', component: TranscriptionDetailComponent },
+{ path: 'analysis-detail/:id', component: AnalysisDetailComponent },
+{ path: 'pv-detail/:id', component: PvDetailComponent },
+]
 },
 
 // Catch-all redirect

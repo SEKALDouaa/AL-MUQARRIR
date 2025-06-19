@@ -1,0 +1,20 @@
+.custom-btn {
+  background-color: #423629;
+  color: #E3D6C8;
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.custom-btn:hover {
+  background-color: #BC9D7E;
+  color: white;
+  transform: scale(1.03);
+}
+
+.custom-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(188, 157, 126, 0.4);
+}
