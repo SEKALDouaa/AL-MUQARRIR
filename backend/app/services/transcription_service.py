@@ -9,6 +9,11 @@ from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from ..services.ai_services import generate_deroulement, analyze_transcription
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+import arabic_reshaper
+from bidi.algorithm import get_display
+
 
 def create_transcription(data):
     data['dateSceance'] = datetime.strptime(data['dateSceance'], "%Y-%m-%d").date()
@@ -171,10 +176,16 @@ def export_transcription_pv_arabe_pdf(transcription_id):
     c = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
 
+    # Register Arabic font
+    font_path = "static/fonts/Amiri-Regular.ttf"
+    pdfmetrics.registerFont(TTFont("Arabic", font_path))
+
     def draw_right_aligned_line(text, y, font_size=12):
-        c.setFont("Helvetica", font_size)
-        text_width = c.stringWidth(text, "Helvetica", font_size)
-        c.drawString(width - text_width - 50, y, text)
+        reshaped = arabic_reshaper.reshape(text)
+        bidi_text = get_display(reshaped)
+        c.setFont("Arabic", font_size)
+        text_width = c.stringWidth(bidi_text, "Arabic", font_size)
+        c.drawString(width - text_width - 50, y, bidi_text)
 
     y = height - 50
     line_height = 18
@@ -231,10 +242,10 @@ def export_transcription_pv_arabe_pdf(transcription_id):
         y -= line_height
 
     y -= 2 * line_height
-    c.setFont("Helvetica", 12)
-    c.drawString(50, y, "..............  حرر بمدينة .............. في تاريخ  ")
+    c.setFont("Arabic", 12)
+    draw_right_aligned_line("..............  حرر بمدينة .............. في تاريخ  ", y)
     y -= line_height
-    c.drawString(50, y, "............................. :الرئيس: ............................الكاتب")
+    draw_right_aligned_line("............................. :الرئيس: ............................الكاتب", y)
 
     c.showPage()
     c.save()
@@ -288,6 +299,40 @@ def export_transcription_analysis_arabe_pdf(transcription_id):
     for line in lines:
         textobject.textLine(line.rjust(100))  # approximate RTL look
     c.drawText(textobject)
+    c.showPage()
+    c.save()
+    buffer.seek(0)
+
+    return send_file(
+        buffer,
+        as_attachment=True,
+        download_name=f"تحليل_محضر_{transcription.titreSceance}.pdf",
+        mimetype="application/pdf"
+    )
+def export_transcription_analysis_arabe_pdf(transcription_id):
+    transcription = Transcription.query.get(transcription_id)
+    if not transcription or not transcription.Analyse:
+        return None
+
+    buffer = io.BytesIO()
+    c = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
+
+    # Register Arabic font
+    font_path = "static/fonts/Amiri-Regular.ttf"
+    pdfmetrics.registerFont(TTFont("Arabic", font_path))
+
+    y = height - 50
+    line_height = 18
+    c.setFont("Arabic", 12)
+
+    for line in transcription.Analyse.split('\n'):
+        reshaped = arabic_reshaper.reshape(line)
+        bidi_text = get_display(reshaped)
+        text_width = c.stringWidth(bidi_text, "Arabic", 12)
+        c.drawString(width - text_width - 50, y, bidi_text)
+        y -= line_height
+
     c.showPage()
     c.save()
     buffer.seek(0)
