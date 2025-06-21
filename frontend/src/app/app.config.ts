@@ -17,7 +17,11 @@ provideZoneChangeDetection({ eventCoalescing: true }),
     provideHttpClient(
       withInterceptors([authInterceptor]) // 👈 Register your interceptor
     ),
-    provideToastr(),
+    provideToastr({
+      timeOut: 4000, // 4 seconds
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+    }),
     importProvidersFrom(BrowserAnimationsModule)
   ]
 };

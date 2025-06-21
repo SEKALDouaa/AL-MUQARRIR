@@ -99,6 +99,10 @@
   margin: 20px 0;
 }
 
+.form-box.register .input-box{
+  margin: 17px 0; /* reduced margin for register form */
+}
+
 .input-box input {
   width: 100%;
   padding: 13px 50px 13px 20px;
@@ -176,7 +180,7 @@
   background: #7B3131; /* burgundy sliding background */
   border-radius: 150px;
   z-index: 2;
-  transition: left 1.8s ease-in-out;
+  transition: left 1.2s ease-in-out;
 }
 
 .auth-wrapper.active .toggle-box::before {
@@ -195,7 +199,7 @@
   z-index: 3;
   padding: 20px;
   text-align: center;
-  transition: transform 0.6s ease-in-out 1.2s, opacity 0.6s ease-in-out 1.2s;
+  transition: transform 1s ease-in-out 2s, opacity 1s ease-in-out 2s;
   pointer-events: auto;
 }
 

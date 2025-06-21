@@ -76,10 +76,14 @@ constructor(
   onRegister() {
     this.authService.register(this.registerForm.value).subscribe({
       next: () => {
-        this.toastr.success('Account created successfully!');
-        this.loginMode = true;
+        this.toastr.success('Account created successfully! Please log in.');
+        
+
+        this.isRegisterMode = false; // Switch to login view
+        this.registerForm.reset(); // Clear the form fields
       },
       error: (err) => {
+        console.error('Registration API call failed. Error object:', err);
         this.toastr.error(err.error?.error || 'Signup failed');
       }
     });

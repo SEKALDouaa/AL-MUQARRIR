@@ -1,1 +1,70 @@
 /* You can add global styles to this file, and also import other style files */
+
+/*
+ * Custom toast styles based on user preference from Stack Overflow.
+ */
+
+/* Position the main CDK overlay container (Kept from previous version) */
+.cdk-overlay-container, .overlay-container {
+    position: fixed !important;
+    z-index: 10000 !important;
+    pointer-events: none !important;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+/* Position the toast container within the overlay (Kept from previous version) */
+#toast-container {
+    position: absolute !important;
+    top: 20px !important;
+    right: 20px !important;
+    z-index: 10001 !important;
+    pointer-events: auto !important;
+}
+
+/* Base style for all toasts, adapted from user's request */
+#toast-container > .toast {
+    position: relative;
+    overflow: hidden;
+    margin: 0 0 6px;
+    padding: 50px 50px 50px 50px;
+    width: 300px;
+    border-radius: 15px !important;
+    background-position: 15px center;
+    background-repeat: no-repeat;
+    background-size: 24px;
+    box-shadow: 0 0 12px #999;
+    color: #fff;
+    border: 4px solid green !important;
+}
+
+/* Specific style for SUCCESS toasts */
+#toast-container > .toast-success {
+  background-color: #fff !important; /* Light background */
+  border: 4px solid #28a745 !important; /* Green border */
+  border-radius: 10px !important;
+  padding: 5px 10px 10px 10px;
+  font-weight: bold;
+}
+
+/* Specific style for ERROR toasts */
+#toast-container > .toast-error {
+  background-color: #ffffff !important; /* Light background */
+  border: 4px solid #dc3545 !important; /* Red border */
+  border-radius: 10px !important;
+  padding: 5px 10px 10px 10px;
+  font-weight: bold;
+}
+
+/* Make the close button more visible */
+.toast-close-button {
+    color: #ffffff !important;
+    opacity: 0.8 !important;
+    text-shadow: none !important;
+}
+
+.toast-close-button:hover {
+    opacity: 1 !important;
+}
