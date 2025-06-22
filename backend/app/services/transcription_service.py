@@ -13,7 +13,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 import arabic_reshaper
 from bidi.algorithm import get_display
-
+from decouple import config
 
 def create_transcription(data):
     data['dateSceance'] = datetime.strptime(data['dateSceance'], "%Y-%m-%d").date()
@@ -97,6 +97,10 @@ def update_transcription_with_analysis(transcription_id: int) -> Transcription:
     transcription.Analyse = analyze_transcription(transcription.Transcription)
     db.session.commit()
     return transcription
+
+# -------------- GET NGROK URL ----------------
+def get_ngrok_url():
+    return config("NGROK_URL") 
 
 # ----------- Export PV DOCX -----------
 def export_transcription_pv_arabe_docx(transcription_id):

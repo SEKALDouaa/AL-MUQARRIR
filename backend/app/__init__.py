@@ -3,13 +3,13 @@ from .extensions import db, ma, cors
 from .routes.user_routes import user_bp
 from .routes.transcription_routes import transcription_bp
 from flask_jwt_extended import JWTManager
+from .config import Config
 
 jwt = JWTManager()
 
 def create_app():
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-    app.config['JWT_SECRET_KEY'] = 'secret_key'
+    app.config.from_object(Config)
 
     db.init_app(app)
     ma.init_app(app)

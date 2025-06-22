@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from ..services.transcription_service import create_transcription, get_transcription_by_id, get_all_transcriptions, delete_transcription, update_transcription, search_transcriptions
+from ..services.transcription_service import create_transcription, get_transcription_by_id, get_all_transcriptions, delete_transcription, update_transcription, search_transcriptions,get_ngrok_url
 from ..schemas.transcription_schema import TranscriptionSchema
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..services.transcription_service import update_transcription_with_deroulement, update_transcription_with_analysis, export_transcription_pv_arabe_docx, export_transcription_pv_arabe_pdf, export_transcription_analysis_arabe_docx, export_transcription_analysis_arabe_pdf
@@ -126,3 +126,10 @@ def export_analysis_docx(transcription_id):
 @jwt_required()
 def export_analysis_pdf(transcription_id):
     return export_transcription_analysis_arabe_pdf(transcription_id)
+
+@transcription_bp.route('/ngrok_url', methods=['GET'])
+@jwt_required()
+def ngrok_url():
+    # Try to get from environment variable or config
+    ngrok_url = get_ngrok_url()
+    return jsonify({'ngrok_url': ngrok_url})
