@@ -52,7 +52,7 @@ export class PvFormComponent {
       next: (newPv: Transcription) => {
         // The backend returns the created PV object with its ID.
         if (newPv && newPv.id) {
-          this.router.navigate(['/transcription-mode', newPv.id, 'select-transcription-mode']);
+          this.router.navigate(['/Home', 'pv', newPv.id, 'select-transcription-mode']);
         } else {
           console.error('PV created, but no ID was returned from the backend.');
           alert('PV created, but failed to get ID for next step.');

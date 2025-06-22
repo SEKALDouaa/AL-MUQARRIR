@@ -10,6 +10,7 @@ import { TranscriptionListComponent } from './features/transcriptions/transcript
 import { TranscriptionDetailComponent } from './features/transcriptions/transcription-detail/transcription-detail.component'
 import { AnalysisDetailComponent } from './features/analyses/analysis-detail/analysis-detail.component'
 import { PvDetailComponent } from './features/pv/pv-detail/pv-detail.component'
+import { TranscriptionModeComponent } from './pages/transcription-mode/transcription-mode.component'
 
 export const routes: Routes = [
 // Route without layout (auth)
@@ -36,10 +37,7 @@ children: [
 { path: 'transcriptions-detail/:id', component: TranscriptionDetailComponent },
 { path: 'analysis-detail/:id', component: AnalysisDetailComponent },
 { path: 'pv-detail/:id', component: PvDetailComponent },
-{
-    path: 'transcription-mode/:id',
-    loadComponent: () => import('./pages/transcription-mode/transcription-mode.component').then(m => m.TranscriptionModeComponent)
-},
+{ path: 'pv/:id/select-transcription-mode', component: TranscriptionModeComponent },
 ]
 },
 
