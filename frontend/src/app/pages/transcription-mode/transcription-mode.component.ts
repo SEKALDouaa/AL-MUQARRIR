@@ -25,13 +25,15 @@ export class TranscriptionModeComponent implements OnInit {
 
   goToBatchTranscription() {
     // Navigate to the batch transcription page, passing the ID
-    console.log('/batch-transcription:', this.pvId);
-    //this.router.navigate(['/batch-transcription', this.pvId]);
+    if (this.pvId) {
+      this.router.navigate(['/Home', 'batch-transcription', this.pvId]);
+    }
   }
 
   goToRealtimeTranscription() {
     // Navigate to the real-time transcription page, passing the ID
-    console.log('/realtime-transcription:', this.pvId);
-    //this.router.navigate(['/realtime-transcription', this.pvId]);
+    if (this.pvId) {
+      this.router.navigate(['/Home', 'realtime-transcription', this.pvId]);
+    }
   }
 }

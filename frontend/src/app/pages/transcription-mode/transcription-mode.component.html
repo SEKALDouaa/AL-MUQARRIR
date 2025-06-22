@@ -1,23 +1,41 @@
-<div class="container mt-5">
-  <h1>Choose Transcription Method</h1>
-  <p>For PV with ID: {{ pvId }}</p>
-
-  <div class="row">
-    <div class="col-md-6">
-      <div class="card text-center" (click)="goToBatchTranscription()" style="cursor: pointer;">
-        <div class="card-body">
-          <h5 class="card-title">Transcribe an Existing Audio File</h5>
-          <p class="card-text">Upload a pre-recorded audio file (e.g., MP3, WAV, M4A) to be transcribed.</p>
-          <a  class="btn btn-primary">Choose File</a>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<div class="main-container">
+  <div class="container">
+    <div class="content-wrapper">
+      <h1 class="main-title">Choose Your Transcription Method</h1>
+      <p class="subtitle">Select the option that best fits your needs</p>
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="card method-card" (click)="goToBatchTranscription()">
+            <div class="card-body">
+              <div class="card-icon">
+                <i class="fas fa-file-audio"></i>
+              </div>
+              <h5 class="card-title">Transcribe Existing Audio</h5>
+              <p class="card-text">Upload a pre-recorded audio file to get accurate transcription results.</p>
+              <ul class="card-features">
+                <li><i class="fas fa-check-circle"></i> Supports MP3, WAV, M4A formats</li>
+                <li><i class="fas fa-check-circle"></i> High accuracy processing</li>
+                <li><i class="fas fa-check-circle"></i> Batch processing available</li>
+              </ul>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card text-center"  (click)="goToRealtimeTranscription()" style="cursor: pointer;">
-        <div class="card-body">
-          <h5 class="card-title">Start Live Transcription</h5>
-          <p class="card-text">Begin a new recording session directly in your browser.</p>
-          <a  class="btn btn-success">Start Recording</a>
+        <div class="col-lg-6">
+          <div class="card method-card pulse-animation" (click)="goToRealtimeTranscription()">
+            <div class="card-body">
+              <div class="card-icon">
+                <i class="fas fa-microphone"></i>
+              </div>
+              <h5 class="card-title">Start Live Transcription</h5>
+              <p class="card-text">Begin real-time recording and transcription directly in your browser.</p>
+              <ul class="card-features">
+                <li><i class="fas fa-check-circle"></i> Real-time processing</li>
+                <li><i class="fas fa-check-circle"></i> Instant results</li>
+                <li><i class="fas fa-check-circle"></i> No file uploads needed</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>
