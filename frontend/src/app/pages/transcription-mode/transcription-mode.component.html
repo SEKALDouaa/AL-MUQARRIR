@@ -1,0 +1,25 @@
+<div class="container mt-5">
+  <h1>Choose Transcription Method</h1>
+  <p>For PV with ID: {{ pvId }}</p>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card text-center" (click)="goToBatchTranscription()" style="cursor: pointer;">
+        <div class="card-body">
+          <h5 class="card-title">Transcribe an Existing Audio File</h5>
+          <p class="card-text">Upload a pre-recorded audio file (e.g., MP3, WAV, M4A) to be transcribed.</p>
+          <a  class="btn btn-primary">Choose File</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card text-center"  (click)="goToRealtimeTranscription()" style="cursor: pointer;">
+        <div class="card-body">
+          <h5 class="card-title">Start Live Transcription</h5>
+          <p class="card-text">Begin a new recording session directly in your browser.</p>
+          <a  class="btn btn-success">Start Recording</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

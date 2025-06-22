@@ -3,39 +3,39 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TranscriptionService } from '../../services/transcription/transcription.service';
 import { HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Transcription } from '../../models/transcription.model'; // Import the model
 
 @Component({
-selector: 'app-pv-form',
-standalone: true,
-imports: [CommonModule, FormsModule, HttpClientModule],
-templateUrl: './pv-form.component.html',
-styleUrls: ['./pv-form.component.css']
+  selector: 'app-pv-form',
+  standalone: true,
+  imports: [CommonModule, FormsModule, HttpClientModule],
+  templateUrl: './pv-form.component.html',
+  styleUrls: ['./pv-form.component.css']
 })
 export class PvFormComponent {
-pv = {
-titreSceance: '',
-dateSceance: '',
-HeureDebut: '',
-HeureFin: '',
-President: '',
-Secretaire: '',
-Membres: [''],
-Absents: [''],
-OrdreDuJour: '',
-DateRedaction: '',
-DateProchaineReunion: ''
-};
+  pv = {
+    titreSceance: '',
+    dateSceance: '',
+    HeureDebut: '',
+    HeureFin: '',
+    President: '',
+    Secretaire: '',
+    Membres: [''],
+    Absents: [''],
+    OrdreDuJour: '',
+    DateRedaction: '',
+    DateProchaineReunion: ''
+  };
 
-constructor(private transcriptionService: TranscriptionService) {}
+  constructor(
+    private transcriptionService: TranscriptionService,
+    private router: Router
+  ) {}
 
   private formatTimeToHHMMSS(timeStr: string): string {
-    // If time is already in HH:MM:SS format, return it as is
     if (timeStr.length === 8) return timeStr;
-
-    // If time is in HH:MM format, add ":00" seconds part
     if (timeStr.length === 5) return `${timeStr}:00`;
-
-    // Otherwise, just return original (backend should handle errors)
     return timeStr;
   }
 
@@ -49,9 +49,17 @@ constructor(private transcriptionService: TranscriptionService) {}
     };
 
     this.transcriptionService.createTranscription(dataToSend).subscribe({
-      next: () => alert('Transcription enregistrée avec succès!'),
+      next: (newPv: Transcription) => {
+        // The backend returns the created PV object with its ID.
+        if (newPv && newPv.id) {
+          this.router.navigate(['/transcription-mode', newPv.id, 'select-transcription-mode']);
+        } else {
+          console.error('PV created, but no ID was returned from the backend.');
+          alert('PV created, but failed to get ID for next step.');
+        }
+      },
       error: (err) => {
-        console.error(err);
+        console.error('Erreur lors de l’enregistrement:', err);
         alert('Erreur lors de l’enregistrement.');
       }
     });

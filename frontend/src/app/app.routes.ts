@@ -36,6 +36,10 @@ children: [
 { path: 'transcriptions-detail/:id', component: TranscriptionDetailComponent },
 { path: 'analysis-detail/:id', component: AnalysisDetailComponent },
 { path: 'pv-detail/:id', component: PvDetailComponent },
+{
+    path: 'transcription-mode/:id',
+    loadComponent: () => import('./pages/transcription-mode/transcription-mode.component').then(m => m.TranscriptionModeComponent)
+},
 ]
 },
 
