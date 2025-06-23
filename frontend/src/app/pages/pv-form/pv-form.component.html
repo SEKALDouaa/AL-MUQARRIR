@@ -1,3 +1,4 @@
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <div class="container mt-4">
   <h3>Préparation du Procès-Verbal</h3>
   <form (ngSubmit)="onSubmit()" #pvForm="ngForm" class="pv-form rounded shadow">
@@ -36,18 +37,26 @@
       <label class="form-label">Membres présents</label>
       <div *ngFor="let membre of pv.Membres; let i = index; trackBy: trackByIndex" class="d-flex gap-2 mb-2">
         <input type="text" class="form-control" [(ngModel)]="pv.Membres[i]" [name]="'membre' + i" />
-        <button type="button" class="btn btn-danger" (click)="removeMembre(i)" *ngIf="pv.Membres.length > 1">-</button>
+        <button type="button" class="btn btn-danger" (click)="removeMembre(i)" *ngIf="pv.Membres.length > 1">
+          <i class="fas fa-minus"></i>
+        </button>
       </div>
-      <button type="button" class="btn btn-add btn-primary" (click)="addMembre()">+</button>
+      <button type="button" class="btn btn-add btn-primary" (click)="addMembre()">
+        <i class="fas fa-plus"></i>
+      </button>
     </div>
 
     <div class="mb-3">
       <label class="form-label">Absents</label>
       <div *ngFor="let absent of pv.Absents; let i = index; trackBy: trackByIndex" class="d-flex gap-2 mb-2">
         <input type="text" class="form-control" [(ngModel)]="pv.Absents[i]" [name]="'absent' + i" />
-        <button type="button" class="btn btn-danger" (click)="removeAbsent(i)" *ngIf="pv.Absents.length > 1">-</button>
+        <button type="button" class="btn btn-danger" (click)="removeAbsent(i)" *ngIf="pv.Absents.length > 1">
+          <i class="fas fa-minus"></i>
+        </button>
       </div>
-      <button type="button" class="btn btn-add btn-primary" (click)="addAbsent()">+</button>
+      <button type="button" class="btn btn-add btn-primary" (click)="addAbsent()">
+        <i class="fas fa-plus"></i>
+      </button>
     </div>
 
     <div class="mb-3">
