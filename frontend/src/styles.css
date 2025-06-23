@@ -29,8 +29,7 @@
     position: relative;
     overflow: hidden;
     margin: 0 0 6px;
-    padding: 50px 50px 50px 50px;
-    width: 300px;
+    padding: 50px 30px 50px 30px;
     border-radius: 15px !important;
     background-position: 15px center;
     background-repeat: no-repeat;
@@ -45,7 +44,7 @@
   background-color: #fff !important; /* Light background */
   border: 4px solid #28a745 !important; /* Green border */
   border-radius: 10px !important;
-  padding: 5px 10px 10px 10px;
+  padding: 5px 5px 5px 5px;
   font-weight: bold;
 }
 
@@ -56,6 +55,15 @@
   border-radius: 10px !important;
   padding: 5px 10px 10px 10px;
   font-weight: bold;
+}
+
+/* Override the text color for toast-success and toast-error to a dark color so messages are visible */
+#toast-container > .toast-success,
+#toast-container > .toast-error {
+  color: #000000 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important ;
 }
 
 /* Make the close button more visible */
