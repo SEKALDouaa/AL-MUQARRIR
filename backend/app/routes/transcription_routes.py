@@ -127,7 +127,7 @@ def export_analysis_docx(transcription_id):
 def export_analysis_pdf(transcription_id):
     return export_transcription_analysis_arabe_pdf(transcription_id)
 
-@transcription_bp.route('/ngrok_url', methods=['GET'])
+@transcription_bp.route('/transcriptions/ngrok_url', methods=['GET'])
 @jwt_required()
 def ngrok_url():
     # Try to get from environment variable or config

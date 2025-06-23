@@ -116,7 +116,7 @@ export class TranscriptionService {
   }
 
   getNgrokUrl(): Observable<{ ngrok_url: string }> {
-    return this.http.get<{ ngrok_url: string }>(`${this.apiBase}/ngrok-url`, {
+    return this.http.get<{ ngrok_url: string }>(`${this.apiBase}/ngrok_url`, {
       headers: this.getAuthHeaders(),
     });
   }
