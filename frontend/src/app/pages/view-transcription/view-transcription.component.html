@@ -1,0 +1,29 @@
+<div class="view-transcription-container">
+  <h2>Transcription complète</h2>
+  <div class="results-section">
+    <div class="results-header">
+      <div class="results-title">
+        <i class="fas fa-comments"></i>
+        Transcription
+      </div>
+      <div class="results-count">{{ transcription.length }} segments</div>
+    </div>
+    <div class="transcription-container" id="transcriptionContainer">
+      <ng-container *ngIf="transcription.length; else emptyState">
+        <div *ngFor="let item of transcription" class="transcription-item">
+          <div class="speaker-tag">
+            <i class="fas fa-user speaker-icon"></i>
+            {{ item.speaker }}
+          </div>
+          <div class="transcript-text">{{ item.text }}</div>
+        </div>
+      </ng-container>
+      <ng-template #emptyState>
+        <div class="empty-state">
+          <i class="fas fa-microphone-slash empty-icon"></i>
+          <div>Aucune transcription disponible</div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

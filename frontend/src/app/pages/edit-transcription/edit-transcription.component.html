@@ -1,0 +1,17 @@
+<div class="edit-transcription-container">
+  <h2>Modifier la transcription</h2>
+  <form (ngSubmit)="onSave()">
+    <div class="transcription-list">
+      <div *ngFor="let segment of transcription; let i = index" class="transcription-edit-row">
+        <div class="speaker-label">
+          <i class="fas fa-user speaker-icon"></i>
+          {{ segment.speaker }}
+        </div>
+        <textarea [(ngModel)]="segment.text" name="text-{{i}}" class="transcription-textarea"></textarea>
+      </div>
+    </div>
+    <div class="actions">
+      <button type="submit" class="save-btn">Enregistrer les modifications</button>
+    </div>
+  </form>
+</div>

@@ -79,6 +79,12 @@ export class AssignSpeakersComponent implements OnInit {
     }
   }
 
+  onEditTranscription() {
+    if (this.pvId) {
+      this.router.navigate(['/Home', 'pv', this.pvId, 'edit-transcription']);
+    }
+  }
+
   // Returns the transcription as a list of segments for UI display (like batch-transcription)
   getTranscriptionSegments(): { speaker: string, text: string }[] {
     // Already an array of segments
