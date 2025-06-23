@@ -327,6 +327,29 @@
   box-shadow: 0 6px 20px rgba(108, 117, 125, 0.3);
 }
 
+.next-step-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  
+}
+
+.next-step-btn-wrapper .btn {
+  width: 100%;
+  max-width: 130px;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #7b3131, #5a2424);
+  color: white;
+  box-shadow: 0 4px 15px rgba(123, 49, 49, 0.3);
+}
+
+.next-step-btn-wrapper .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(108, 117, 125, 0.3);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .transcription-card {

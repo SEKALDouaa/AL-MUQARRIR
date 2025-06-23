@@ -74,6 +74,12 @@
                         </div>
                     </ng-template>
                 </div>
+                
             </div>
+            <div class="next-step-btn-wrapper" *ngIf="results.length">
+                    <button class="btn btn-success" (click)="goToAssignSpeakers()">
+                        Suivant <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
         </div>
     </div>

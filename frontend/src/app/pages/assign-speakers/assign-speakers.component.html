@@ -1,0 +1,53 @@
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<div class="assign-speakers-container">
+  <h2>Assigner les intervenants</h2>
+  <form (ngSubmit)="onSaveMapping()">
+    <div class="speaker-mapping-list">
+      <div *ngFor="let speaker of speakerLabels" class="speaker-mapping-row">
+        <div class="speaker-label">
+          <strong>{{ speaker }}</strong>
+        </div>
+        <div class="dropdown-container">
+          <label for="member-{{speaker}}">Membre :</label>
+          <select id="member-{{speaker}}" [(ngModel)]="speakerMapping[speaker]" name="member-{{speaker}}" required>
+            <option [ngValue]="null">-- Sélectionner un membre --</option>
+            <option *ngFor="let member of members" [ngValue]="member">{{ member }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <button type="submit" class="save-btn">Enregistrer</button>
+      <button type="button" class="next-btn" (click)="onNext()">Suivant</button>
+    </div>
+  </form>
+
+  <div class="transcription-block-separator"></div>
+
+  <div class="results-section transcription-view-block">
+    <div class="results-header">
+      <div class="results-title">
+        <i class="fas fa-comments"></i>
+        Transcription complète
+      </div>
+      <div class="results-count">{{ getTranscriptionSegments().length }} segments</div>
+    </div>
+    <div class="transcription-container" id="transcriptionContainer">
+      <ng-container *ngIf="getTranscriptionSegments().length; else emptyState">
+        <div *ngFor="let item of getTranscriptionSegments()" class="transcription-item">
+          <div class="speaker-tag">
+            <i class="fas fa-user speaker-icon"></i>
+            {{ item.speaker }}
+          </div>
+          <div class="transcript-text">{{ item.text }}</div>
+        </div>
+      </ng-container>
+      <ng-template #emptyState>
+        <div class="empty-state">
+          <i class="fas fa-microphone-slash empty-icon"></i>
+          <div>Aucune transcription disponible</div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

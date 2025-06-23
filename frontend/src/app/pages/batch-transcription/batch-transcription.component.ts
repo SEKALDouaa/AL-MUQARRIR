@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranscriptionService } from '../../services/transcription/transcription.service';
 import { CommonModule } from '@angular/common';
 
@@ -23,7 +23,8 @@ export class BatchTranscriptionComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private transcriptionService: TranscriptionService
+    private transcriptionService: TranscriptionService,
+    private router: Router
   ) {
     this.form = this.fb.group({
       file: [null],
@@ -71,6 +72,23 @@ export class BatchTranscriptionComponent implements OnInit {
       this.results = data.result;
       this.status = 'Transcription complete';
       this.statusClass = 'status';
+      // Update the transcription in the backend
+      if (this.pvId && this.results.length) {
+        // Save as an array of segments: [{ speaker: string, text: string }, ...]
+        const segments = this.results.map((item) => {
+          const speaker = this.getSpeaker(item);
+          const text = this.getText(item);
+          return { speaker, text };
+        });
+        this.transcriptionService
+          .updateTranscription(Number(this.pvId), {
+            Transcription: segments,
+          })
+          .subscribe({
+            next: () => console.log('Transcription updated successfully'),
+            error: (err) => console.error('Failed to update transcription:', err),
+          });
+      }
     } catch (error: any) {
       this.status = `Error: ${error.message}`;
       this.statusClass = 'status error';
@@ -112,5 +130,11 @@ export class BatchTranscriptionComponent implements OnInit {
     if (this.status.includes('Error')) return 'status-card status-error';
     if (this.status.includes('complete')) return 'status-card status-success';
     return 'status-card status-default';
+  }
+
+  goToAssignSpeakers() {
+    if (this.pvId) {
+      this.router.navigate(['/Home/pv', this.pvId, 'assign-speakers']);
+    }
   }
 }

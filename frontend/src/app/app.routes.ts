@@ -40,6 +40,7 @@ children: [
 { path: 'pv-detail/:id', component: PvDetailComponent },
 { path: 'pv/:id/select-transcription-mode', component: TranscriptionModeComponent },
 { path: 'batch-transcription/:id', component: BatchTranscriptionComponent },
+{ path: 'pv/:id/assign-speakers', loadComponent: () => import('./pages/assign-speakers/assign-speakers.component').then(m => m.AssignSpeakersComponent) },
 ]
 },
 

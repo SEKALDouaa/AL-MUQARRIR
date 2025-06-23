@@ -63,6 +63,11 @@ def update_transcription(transcription_id, data):
     if 'HeureFin' in data:
         data['HeureFin'] = datetime.strptime(data['HeureFin'], "%H:%M:%S").time()
 
+    # Serialize dict or list to JSON string if needed
+    if isinstance(data.get('Transcription'), (dict, list)):
+        import json
+        data['Transcription'] = json.dumps(data['Transcription'], ensure_ascii=False)
+
     for key, value in data.items():
         setattr(transcription, key, value)
 
