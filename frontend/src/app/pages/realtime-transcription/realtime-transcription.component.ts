@@ -557,10 +557,10 @@ export class RealtimeTranscriptionComponent implements OnInit, AfterViewInit, On
   }
 
   getRecordingButtonLabel(): string {
-    if (this.isRecording) return 'Recording...';
+    if (this.isRecording) return 'Enregistrement...';
     if (this.isPaused && this.transcriptionResults.length > 0)
-      return 'Resume Recording';
-    return 'Start Recording';
+      return 'Reprendre l\'enregistrement';
+    return 'Démarrer l\'enregistrement';
   }
 
   clearTranscription(): void {
