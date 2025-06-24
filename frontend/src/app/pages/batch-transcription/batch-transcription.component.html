@@ -2,23 +2,23 @@
 <div class="main-container">
     <div class="transcription-card">
         <div class="header">
-            <h1><i class="fas fa-file-audio"></i> Audio File Transcription</h1>
-            <p class="subtitle">Upload your audio files and get accurate transcriptions</p>
+            <h1><i class="fas fa-file-audio"></i> Transcription de fichier audio</h1>
+            <p class="subtitle">Importez vos fichiers audio et obtenez des transcriptions précises</p>
         </div>
 
-        <!-- Upload section only shown if no file is selected -->
+        <!-- Section d'importation, affichée uniquement si aucun fichier n'est sélectionné -->
         <div class="upload-section" *ngIf="!form.value.file">
             <div class="file-input-wrapper">
                 <input type="file" class="file-input" id="audioFile" accept="audio/*" (change)="onFileChange($event)">
                 <label for="audioFile" class="file-input-label">
                     <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                    <div class="upload-text">Click to upload or drag and drop</div>
-                    <div class="upload-subtext">Supports MP3, WAV, M4A, and other audio formats</div>
+                    <div class="upload-text">Cliquez pour importer ou glissez-déposez</div>
+                    <div class="upload-subtext">Formats pris en charge : MP3, WAV, M4A et autres</div>
                 </label>
             </div>
         </div>
 
-        <!-- File info (shown when file is selected) -->
+        <!-- Informations sur le fichier (affichées lorsqu'un fichier est sélectionné) -->
         <div class="file-info" *ngIf="form.value.file">
             <div class="file-details">
                 <i class="fas fa-file-audio file-icon"></i>
@@ -36,11 +36,11 @@
             <button class="btn btn-primary" id="transcribeBtn" [disabled]="!form.value.file || isLoading"
                 (click)="submit()">
                 <i class="fas fa-play"></i>
-                Start Transcription
+                Démarrer la transcription
             </button>
             <button class="btn clear-btn" (click)="clearResults()">
                 <i class="fas fa-trash"></i>
-                Clear Results
+                Effacer les résultats
             </button>
         </div>
 
@@ -52,7 +52,7 @@
             <div class="results-header">
                 <div class="results-title">
                     <i class="fas fa-comments"></i>
-                    Transcription Results
+                    Résultats de la transcription
                 </div>
                 <div class="results-count" id="resultsCount">{{ results.length }} segments</div>
             </div>
@@ -70,9 +70,8 @@
                 <ng-template #emptyState>
                     <div class="empty-state">
                         <i class="fas fa-microphone-slash empty-icon"></i>
-                        <div>No transcription results yet</div>
-                        <div style="font-size: 0.9rem; margin-top: 0.5rem;">Upload an audio file and click "Start
-                            Transcription" to begin</div>
+                        <div>Aucun résultat de transcription pour le moment</div>
+                        <div style="font-size: 0.9rem; margin-top: 0.5rem;">Importez un fichier audio et cliquez sur "Démarrer la transcription" pour commencer</div>
                     </div>
                 </ng-template>
             </div>

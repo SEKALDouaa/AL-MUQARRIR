@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 })
 export class BatchTranscriptionComponent implements OnInit {
   form: FormGroup;
-  status: string = 'Select an audio file to begin';
+  status: string = 'Sélectionnez un fichier audio pour commencer';
   statusClass: string = 'status';
   results: any[] = [];
   ngrokUrl: string = '';
@@ -38,7 +38,7 @@ export class BatchTranscriptionComponent implements OnInit {
         this.ngrokUrl = res.ngrok_url;
         console.log('Ngrok URL:', this.ngrokUrl); // Debug log
       },
-      error: () => (this.status = 'Failed to fetch API URL'),
+      error: () => (this.status = 'Échec de la récupération de l’URL de l’API'),
     });
   }
 
@@ -46,15 +46,15 @@ export class BatchTranscriptionComponent implements OnInit {
     const file = event.target.files[0];
     this.form.patchValue({ file });
     this.status = file
-      ? `Ready to transcribe: ${file.name}`
-      : 'Select an audio file to begin transcription';
+      ? `Prêt à transcrire : ${file.name}`
+      : 'Sélectionnez un fichier audio pour commencer la transcription';
     this.statusClass = 'status';
   }
 
   async submit() {
     if (!this.form.value.file || !this.ngrokUrl) return;
     this.isLoading = true;
-    this.status = 'Transcribing...';
+    this.status = 'Transcription en cours...';
     this.statusClass = 'status loading';
     this.results = [];
 
@@ -70,7 +70,7 @@ export class BatchTranscriptionComponent implements OnInit {
         throw new Error((await response.text()) || response.statusText);
       const data = await response.json();
       this.results = data.result;
-      this.status = 'Transcription complete';
+      this.status = 'Transcription terminée';
       this.statusClass = 'status';
       // Update the transcription in the backend
       if (this.pvId && this.results.length) {
@@ -90,7 +90,7 @@ export class BatchTranscriptionComponent implements OnInit {
           });
       }
     } catch (error: any) {
-      this.status = `Error: ${error.message}`;
+      this.status = `Erreur : ${error.message}`;
       this.statusClass = 'status error';
     } finally {
       this.isLoading = false;
@@ -117,7 +117,7 @@ export class BatchTranscriptionComponent implements OnInit {
 
   clearFile() {
     this.form.patchValue({ file: null });
-    this.status = 'Select an audio file to begin transcription';
+    this.status = 'Sélectionnez un fichier audio pour commencer la transcription';
     this.statusClass = 'status';
   }
 
