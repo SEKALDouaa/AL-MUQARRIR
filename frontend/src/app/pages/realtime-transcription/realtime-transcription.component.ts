@@ -36,7 +36,7 @@ export class RealtimeTranscriptionComponent implements OnInit, AfterViewInit, On
   // Public properties for template
   isRecording = false;
   isPaused = false; // Track if paused
-  status = 'Ready to record';
+  status = 'Prêt à enregistrer';
   statusClass = '';
   transcriptionResults: TranscriptionSegment[] = [];
 
@@ -101,11 +101,11 @@ export class RealtimeTranscriptionComponent implements OnInit, AfterViewInit, On
         }
         setTimeout(() => this.startVisualizer(), 100);
 
-        this.updateStatus('Recording...', 'recording');
+        this.updateStatus('Enregistrement...', 'recording');
         return;
       }
 
-      this.updateStatus('Initializing...', '');
+      this.updateStatus('Initialisation...', '');
 
       const stream = await this.getUserMediaStream();
       await this.setupAudioProcessing(stream);
@@ -131,7 +131,7 @@ export class RealtimeTranscriptionComponent implements OnInit, AfterViewInit, On
     this.stopChunkInterval();
     this.stopVisualizer();
     this.closeAudioContext();
-    this.updateStatus('Recording paused', '');
+    this.updateStatus('Enregistrement en pause', '');
     // No backend update here
   }
 
@@ -146,10 +146,10 @@ export class RealtimeTranscriptionComponent implements OnInit, AfterViewInit, On
       next: (response) => {
         this.ngrokUrl = response.ngrok_url;
         this.API_URL = `${this.ngrokUrl}/process_audio_minimal_no_refine`;
-        this.updateStatus('Ready to record', '');
+        this.updateStatus('Prêt à enregistrer', '');
       },
       error: (error) => {
-        this.handleError('Failed to fetch API configuration', error);
+        this.handleError('Échec de la récupération de la configuration de l’API', error);
       },
     });
   }
@@ -269,7 +269,7 @@ export class RealtimeTranscriptionComponent implements OnInit, AfterViewInit, On
 
       await this.sendToTranscriptionAPI(base64Audio);
     } catch (error: any) {
-      this.handleError('Audio processing failed', error);
+      this.handleError('Échec du traitement audio', error);
     }
   }
 
@@ -354,7 +354,7 @@ export class RealtimeTranscriptionComponent implements OnInit, AfterViewInit, On
       const result = await response.json();
       this.handleTranscriptionResult(result.result);
     } catch (error: any) {
-      this.handleError('API request failed', error);
+      this.handleError("Échec de la requête à l'API", error);
     }
   }
 
@@ -517,7 +517,7 @@ export class RealtimeTranscriptionComponent implements OnInit, AfterViewInit, On
   private handleError(message: string, error: any): void {
     console.error(message, error);
     this.updateStatus(
-      `${message}: ${error.message || 'Unknown error'}`,
+      `${message}: ${error.message || 'Erreur inconnue'}`,
       'error'
     );
   }
