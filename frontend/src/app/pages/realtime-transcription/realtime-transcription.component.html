@@ -1,0 +1,95 @@
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<div class="main-container">
+    <div class="transcription-container">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="title-wrapper">
+                <div class="title-icon">
+                    <i class="fa fa-microphone-alt"></i>
+                </div>
+                <h1 class="main-title">Transcription en temps réel</h1>
+            </div>
+            <div class="status-indicator" [ngClass]="statusClass">
+                <div class="status-dot"></div>
+                <span class="status-text">{{ status }}</span>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <div class="control-buttons">
+                <button (click)="startRecording()" [disabled]="isRecording" class="control-btn record-btn"
+                    [class.pulse]="isRecording">
+                    <div class="btn-icon">
+                        <i class="fa fa-microphone"></i>
+                    </div>
+                    <span>{{ getRecordingButtonLabel() }}</span>
+                </button>
+
+                <button (click)="stopRecording()" [disabled]="!isRecording" class="control-btn stop-btn">
+                    <div class="btn-icon">
+                        <i class="fa fa-stop"></i>
+                    </div>
+                    <span>Mettre en pause</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Audio Visualizer -->
+        <div class="visualizer-section">
+            <div class="visualizer-wrapper">
+                <div #visualizer class="audio-visualizer">
+                    <div class="visualizer-bg"></div>
+                </div>
+                <div class="visualizer-label">Niveaux audio</div>
+            </div>
+        </div>
+
+        <!-- Transcription Results -->
+        <div class="transcription-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fa fa-comments"></i>
+                    Transcription en direct
+                </h2>
+                <div class="transcription-count" *ngIf="transcriptionResults.length > 0">
+                    {{ transcriptionResults.length }} segments
+                </div>
+            </div>
+
+            <div class="transcription-container-inner">
+                <div id="transcriptionResults" class="transcription-results"
+                    [class.empty]="transcriptionResults.length === 0">
+
+                    <!-- Empty State -->
+                    <div *ngIf="transcriptionResults.length === 0" class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fa fa-microphone-slash"></i>
+                        </div>
+                        <p class="empty-text">Commencez l'enregistrement pour voir les résultats de la transcription
+                        </p>
+                    </div>
+
+                    <!-- Transcription Segments -->
+                    <div *ngFor="let segment of transcriptionResults; let i = index" class="transcription-segment"
+                        [class.latest]="i === transcriptionResults.length - 1">
+                        <div class="segment-header">
+                            <span class="speaker-badge">{{ segment.speaker }}</span>
+                            <span class="segment-index">#{{ i + 1 }}</span>
+                        </div>
+                        <div class="segment-content">
+                            <p class="segment-text">{{ segment.text }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assign Speakers Button -->
+        <div class="next-step-btn-wrapper" *ngIf="transcriptionResults.length">
+            <button class="btn btn-success" (click)="goToAssignSpeakers()">
+                Suivant <i class="fa fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</div>

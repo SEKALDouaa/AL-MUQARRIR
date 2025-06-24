@@ -43,6 +43,7 @@ children: [
 { path: 'pv/:id/assign-speakers', loadComponent: () => import('./pages/assign-speakers/assign-speakers.component').then(m => m.AssignSpeakersComponent) },
 { path: 'pv/:id/edit-transcription', loadComponent: () => import('./pages/edit-transcription/edit-transcription.component').then(m => m.EditTranscriptionComponent) },
 { path: 'pv/:id/view-transcription', loadComponent: () => import('./pages/view-transcription/view-transcription.component').then(m => m.ViewTranscriptionComponent) },
+{ path: 'realtime-transcription/:id', loadComponent: () => import('./pages/realtime-transcription/realtime-transcription.component').then(m => m.RealtimeTranscriptionComponent) },
 ]
 },
 
