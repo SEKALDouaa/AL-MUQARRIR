@@ -28,6 +28,6 @@ constructor(
   }
 
   goToDetails(id: number) {
-    this.router.navigate(['/Home/transcriptions-detail', id]);
+    this.router.navigate(['/Home', 'pv', id, 'view-transcription']);
   }
 }
