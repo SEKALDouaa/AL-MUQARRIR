@@ -62,7 +62,7 @@ export class AssignSpeakersComponent implements OnInit {
         Transcription: remappedTranscription
       }).subscribe({
         next: () => {
-          // Optionally show a success message
+          this.router.navigate(['/Home', 'pv', this.pvId, 'view-transcription']);
         },
         error: (err) => {
           // Optionally show an error message
@@ -90,4 +90,6 @@ export class AssignSpeakersComponent implements OnInit {
     // Already an array of segments
     return this.transcription;
   }
+
+  
 }

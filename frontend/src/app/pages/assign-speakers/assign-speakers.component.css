@@ -37,6 +37,7 @@
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 1em;
+  margin-left: 5px;
 }
 .transcription-text {
   flex: 2;

@@ -535,7 +535,18 @@ export class RealtimeTranscriptionComponent implements OnInit, AfterViewInit, On
 
   // Add navigation to assign speakers
   goToAssignSpeakers() {
-    if (this.pvId) {
+    if (this.pvId && this.transcriptionResults.length) {
+      // Prepare segments for backend update
+      const segments = this.transcriptionResults.map(seg => ({ speaker: seg.speaker, text: seg.text }));
+      this.transcriptionService.updateTranscription(Number(this.pvId), { Transcription: segments }).subscribe({
+        next: () => {
+          window.location.href = `/Home/pv/${this.pvId}/assign-speakers`;
+        },
+        error: (err) => {
+          this.handleError('Échec de la mise à jour de la transcription', err);
+        }
+      });
+    } else if (this.pvId) {
       window.location.href = `/Home/pv/${this.pvId}/assign-speakers`;
     }
   }
