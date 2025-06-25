@@ -1,18 +1,96 @@
-<div class="container p-4" *ngIf="transcription">
-  <h2 class="mb-3 text-start">{{ transcription.titreSceance }}</h2>
-  <h4 class="text-muted text-start">{{ title }}</h4>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<div class="container" *ngIf="transcription">
+  <!-- Header Section -->
+  <header class="meeting-header">
+    <h1 class="meeting-title">{{ transcription.titreSceance }}</h1>
+    <h2 class="meeting-subtitle">محضر اجتماع</h2>
+  </header>
 
-  <textarea
-    class="form-control mb-4"
-    [(ngModel)]="editableContent"
-    rows="20"
-    dir="rtl"
-    style="white-space: pre-wrap; font-family: 'Amiri', serif; text-align: right;"
-  ></textarea>
+  <!-- Meeting Details Section -->
+  <section class="pv-section" role="region" aria-label="تفاصيل الجلسة">
+    <div class="pv-field">
+      <span class="pv-label">عنوان الجلسة:</span>
+      <span class="pv-value">{{ transcription.titreSceance }}</span>
+    </div>
+    <div class="pv-field">
+      <span class="pv-label">تاريخ الجلسة:</span>
+      <span class="pv-value">{{ transcription.dateSceance | date:'yyyy/MM/dd' }}</span>
+    </div>
+    <div class="pv-field">
+      <span class="pv-label">الساعة:</span>
+      <span class="pv-value">{{ transcription.HeureDebut }} إلى {{ transcription.HeureFin }}</span>
+    </div>
+    <div class="pv-field">
+      <span class="pv-label">الرئيس:</span>
+      <span class="pv-value">{{ transcription.President }}</span>
+    </div>
+    <div class="pv-field">
+      <span class="pv-label">الكاتب:</span>
+      <span class="pv-value">{{ transcription.Secretaire }}</span>
+    </div>
+  </section>
 
-  <div class="text-center mt-3">
-    <button class="custom-btn me-2" (click)="save()">Enregistrer</button>
-    <button class="custom-btn me-2" (click)="exportPdf()">Exporter PDF</button>
-    <button class="custom-btn" (click)="exportDocx()">Exporter DOCX</button>
+  <!-- Present Members Section -->
+  <section class="pv-section" role="region" aria-label="الأعضاء الحاضرون">
+    <div class="section-header">الأعضاء الحاضرون:</div>
+    <div class="pv-value">{{ transcription.Membres || 'لا يوجد' }}</div>
+  </section>
+
+  <!-- Absent Members Section -->
+  <section class="pv-section" *ngIf="transcription.Absents" role="region" aria-label="الأعضاء الغائبون">
+    <div class="section-header">الأعضاء الغائبون:</div>
+    <div class="pv-value">{{ transcription.Absents }}</div>
+  </section>
+
+  <!-- Agenda Section -->
+  <section class="pv-section" role="region" aria-label="جدول الأعمال">
+    <div class="section-header">جدول الأعمال:</div>
+    <div class="pv-value">{{ transcription.OrdreDuJour || 'غير متوفر' }}</div>
+  </section>
+
+  <!-- Meeting Progress Section -->
+  <section class="pv-section" role="region" aria-label="سير الجلسة">
+    <div class="section-header">سير الجلسة:</div>
+    <div class="pv-value">{{ transcription.Deroulement || 'غير متوفر' }}</div>
+  </section>
+
+  <!-- Next Meeting Section -->
+  <section class="pv-section" *ngIf="transcription.DateProchaineReunion" role="region" aria-label="تاريخ الاجتماع المقبل">
+    <div class="section-header">تاريخ الاجتماع المقبل:</div>
+    <div class="pv-value">{{ transcription.DateProchaineReunion | date:'yyyy/MM/dd' }}</div>
+  </section>
+
+  <!-- Signature Section
+  <section class="signature-section" role="region" aria-label="منطقة التوقيعات">
+    <div class="pv-value">حرر بمدينة .............. في تاريخ ..............</div>
+    <div class="pv-value" style="margin-top: 1.5rem;">
+      الرئيس: ............................ &nbsp;&nbsp;&nbsp;&nbsp; الكاتب: ............................
+    </div>
+  </section> -->
+
+  <!-- Action Buttons -->
+  <div class="button-container" role="group" aria-label="إجراءات المحضر">
+    <button class="custom-btn" 
+            (click)="save()" 
+            type="button"
+            aria-label="Enregistrer le PV">
+      <i class="fas fa-save" aria-hidden="true"></i>
+      Enregistrer
+    </button>
+    <button class="custom-btn" 
+            (click)="exportPdf()" 
+            type="button"
+            aria-label="Exporter en PDF">
+      <i class="fas fa-file-pdf" aria-hidden="true"></i>
+      Exporter PDF
+    </button>
+    <button class="custom-btn" 
+            (click)="exportDocx()" 
+            type="button"
+            aria-label="Exporter en Word">
+      <i class="fas fa-file-word" aria-hidden="true"></i>
+      Exporter DOCX
+    </button>
   </div>
 </div>
+
