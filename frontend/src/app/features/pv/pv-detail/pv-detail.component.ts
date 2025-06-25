@@ -47,6 +47,23 @@ constructor(
     });
   }
 
+  // Safely parse the transcription JSON or array
+  parseTranscription(transcription: any): { speaker: string, text: string }[] {
+    if (!transcription) return [];
+    try {
+      if (typeof transcription === 'string') {
+        const parsed = JSON.parse(transcription);
+        return Array.isArray(parsed) ? parsed : [];
+      }
+      if (Array.isArray(transcription)) {
+        return transcription;
+      }
+      return [];
+    } catch {
+      return [];
+    }
+  }
+
   private download(blob: Blob, filename: string): void {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');

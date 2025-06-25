@@ -48,6 +48,35 @@
     <div class="pv-value">{{ transcription.OrdreDuJour || 'غير متوفر' }}</div>
   </section>
 
+  <!-- Full Transcription Section -->
+  <section class="pv-section" *ngIf="transcription.Transcription" role="region" aria-label="التفريغ الكامل">
+
+    <div class="results-header">
+      <div class="results-title">
+        <i class="fas fa-comments"></i> التفريغ الكامل:
+      </div>
+      <div class="results-count">{{ parseTranscription(transcription.Transcription).length }} مقطع</div>
+    </div>
+    <div class="transcription-container" id="transcriptionContainer">
+      <ng-container *ngIf="parseTranscription(transcription.Transcription).length; else noTranscription">
+        <div *ngFor="let seg of parseTranscription(transcription.Transcription)" class="transcription-item">
+          <div class="speaker-tag">
+            <i class="fas fa-user speaker-icon"></i>
+            {{ seg.speaker }}
+          </div>
+          <div class="transcript-text">{{ seg.text }}</div>
+        </div>
+      </ng-container>
+      <ng-template #noTranscription>
+        <div class="empty-state">
+          <i class="fas fa-microphone-slash empty-icon"></i>
+          <div>لا يوجد تفريغ</div>
+        </div>
+      </ng-template>
+    </div>
+
+  </section>
+
   <!-- Meeting Progress Section -->
   <section class="pv-section" role="region" aria-label="سير الجلسة">
     <div class="section-header">سير الجلسة:</div>
@@ -55,7 +84,8 @@
   </section>
 
   <!-- Next Meeting Section -->
-  <section class="pv-section" *ngIf="transcription.DateProchaineReunion" role="region" aria-label="تاريخ الاجتماع المقبل">
+  <section class="pv-section" *ngIf="transcription.DateProchaineReunion" role="region"
+    aria-label="تاريخ الاجتماع المقبل">
     <div class="section-header">تاريخ الاجتماع المقبل:</div>
     <div class="pv-value">{{ transcription.DateProchaineReunion | date:'yyyy/MM/dd' }}</div>
   </section>
@@ -70,27 +100,17 @@
 
   <!-- Action Buttons -->
   <div class="button-container" role="group" aria-label="إجراءات المحضر">
-    <button class="custom-btn" 
-            (click)="save()" 
-            type="button"
-            aria-label="Enregistrer le PV">
+    <button class="custom-btn" (click)="save()" type="button" aria-label="Enregistrer le PV">
       <i class="fas fa-save" aria-hidden="true"></i>
       Enregistrer
     </button>
-    <button class="custom-btn" 
-            (click)="exportPdf()" 
-            type="button"
-            aria-label="Exporter en PDF">
+    <button class="custom-btn" (click)="exportPdf()" type="button" aria-label="Exporter en PDF">
       <i class="fas fa-file-pdf" aria-hidden="true"></i>
       Exporter PDF
     </button>
-    <button class="custom-btn" 
-            (click)="exportDocx()" 
-            type="button"
-            aria-label="Exporter en Word">
+    <button class="custom-btn" (click)="exportDocx()" type="button" aria-label="Exporter en Word">
       <i class="fas fa-file-word" aria-hidden="true"></i>
       Exporter DOCX
     </button>
   </div>
 </div>
-
