@@ -46,7 +46,17 @@ export class EditTranscriptionComponent implements OnInit {
         Transcription: this.transcription
       }).subscribe({
         next: () => {
-          this.router.navigate(['/Home', 'pv', this.pvId, 'view-transcription']);
+          // Call generateDeroulement after successful update
+          this.transcriptionService.generateDeroulement(Number(this.pvId)).subscribe({
+            next: () => {
+              this.router.navigate(['/Home', 'pv', this.pvId, 'view-transcription']);
+            },
+            error: (err) => {
+              console.error('Échec de la génération du déroulement', err);
+              // Still navigate even if generation fails
+              this.router.navigate(['/Home', 'pv', this.pvId, 'view-transcription']);
+            }
+          });
         },
         error: (err) => {
           console.error('Failed to update transcription', err);

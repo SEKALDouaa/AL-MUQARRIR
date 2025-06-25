@@ -62,20 +62,23 @@ export class AssignSpeakersComponent implements OnInit {
         Transcription: remappedTranscription
       }).subscribe({
         next: () => {
-          this.router.navigate(['/Home', 'pv', this.pvId, 'view-transcription']);
+          // Call generateDeroulement after successful update
+          this.transcriptionService.generateDeroulement(Number(this.pvId)).subscribe({
+            next: () => {
+              this.router.navigate(['/Home', 'pv', this.pvId, 'view-transcription']);
+            },
+            error: (err) => {
+              console.error('Échec de la génération du déroulement', err);
+              // Still navigate even if generation fails
+              this.router.navigate(['/Home', 'pv', this.pvId, 'view-transcription']);
+            }
+          });
         },
         error: (err) => {
           // Optionally show an error message
           console.error('Failed to update transcription', err);
         }
       });
-    }
-  }
-
-  onNext() {
-    // Optionally, update the backend with the mapping or new transcription
-    if (this.pvId) {
-      this.router.navigate(['/Home', 'pv', this.pvId, 'next-step']);
     }
   }
 
