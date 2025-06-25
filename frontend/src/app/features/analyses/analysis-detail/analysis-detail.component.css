@@ -18,3 +18,101 @@
   outline: none;
   box-shadow: 0 0 0 3px rgba(188, 157, 126, 0.4);
 }
+
+.analysis-markdown-block {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(66, 54, 41, 0.08);
+  padding: 2rem 1.5rem;
+  margin-bottom: 2rem;
+  font-family: 'Amiri', serif;
+  font-size: 1.1rem;
+  color: #2c3e50;
+  direction: rtl;
+  text-align: right;
+  word-break: break-word;
+}
+
+.analysis-markdown-block h1,
+.analysis-markdown-block h2,
+.analysis-markdown-block h3,
+.analysis-markdown-block h4,
+.analysis-markdown-block h5,
+.analysis-markdown-block h6 {
+  color: #423629;
+  font-family: 'Cairo', 'Amiri', serif;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.analysis-markdown-block ul,
+.analysis-markdown-block ol {
+  padding-right: 2rem;
+  margin-bottom: 1rem;
+}
+
+.analysis-markdown-block p {
+  margin-bottom: 1rem;
+  line-height: 1.8;
+}
+
+.analysis-markdown-block strong {
+  color: #7b3131;
+}
+
+.analysis-markdown-block blockquote {
+  border-right: 4px solid #BC9D7E;
+  background: #f8f6f3;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  color: #423629;
+  border-radius: 8px;
+}
+
+.analysis-markdown-block code {
+  background: #f4e7d6;
+  color: #7b3131;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.95em;
+}
+
+.analysis-markdown-block pre code {
+  display: block;
+  padding: 1rem;
+  background: #f4e7d6;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.analysis-markdown-block table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+
+.analysis-markdown-block th,
+.analysis-markdown-block td {
+  border: 1px solid #e3d6c8;
+  padding: 0.5rem 1rem;
+  text-align: right;
+}
+
+.analysis-markdown-block th {
+  background: #f8f6f3;
+  color: #423629;
+}
+
+.no-analysis-container {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(66, 54, 41, 0.08);
+  padding: 2rem 1.5rem;
+  margin: 2rem 0 2rem 0;
+  font-family: 'Amiri', serif;
+  font-size: 1.1rem;
+  color: #888;
+  direction: rtl;
+  text-align: center;
+}

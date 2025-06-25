@@ -4,20 +4,21 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Transcription } from '../../../models/transcription.model';
 import { TranscriptionService } from '../../../services/transcription/transcription.service';
+import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
-selector: 'analysis-detail',
-standalone: true,
-imports: [CommonModule, FormsModule],
-templateUrl: './analysis-detail.component.html',
-styleUrls: ['./analysis-detail.component.css']
+  selector: 'analysis-detail',
+  standalone: true,
+  imports: [CommonModule, FormsModule, MarkdownModule],
+  templateUrl: './analysis-detail.component.html',
+  styleUrls: ['./analysis-detail.component.css']
 })
 export class AnalysisDetailComponent implements OnInit {
-transcription!: Transcription;
-editableContent: string = '';
-title = 'تحليل الجلسة';
+  transcription!: Transcription;
+  editableContent: string = '';
+  title = 'تحليل الجلسة';
 
-constructor(
+  constructor(
     private route: ActivatedRoute,
     private service: TranscriptionService
   ) {}

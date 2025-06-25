@@ -1,6 +1,17 @@
 <div class="container p-4" *ngIf="transcription">
-  <h2 class="mb-3 text-start">{{ transcription.titreSceance }}</h2>
-  <h4 class="text-muted text-start">{{ title }}</h4>
+  
+
+  <div class="analysis-markdown-block" *ngIf="editableContent; else noAnalysis">
+    <h1 class="text-muted text-center">{{ title }}</h1>
+    <h2 class="mb-3 text-center">{{ transcription.titreSceance }}</h2>
+    
+    <markdown [data]="editableContent"></markdown>
+  </div>
+  <ng-template #noAnalysis>
+    <div class="no-analysis-container">
+      <div class="text-muted">لا يوجد تحليل متوفر</div>
+    </div>
+  </ng-template>
 
   <textarea
     class="form-control mb-4"
@@ -8,10 +19,10 @@
     rows="20"
     dir="rtl"
     style="white-space: pre-wrap; font-family: 'Amiri', serif; text-align: right;"
+    *ngIf="false"
   ></textarea>
 
   <div class="text-center mt-3">
-    <button class="custom-btn me-2" (click)="save()">Enregistrer</button>
     <button class="custom-btn me-2" (click)="exportPdf()">Exporter PDF</button>
     <button class="custom-btn" (click)="exportDocx()">Exporter DOCX</button>
   </div>
