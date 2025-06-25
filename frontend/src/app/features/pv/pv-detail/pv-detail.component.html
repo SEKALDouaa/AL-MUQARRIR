@@ -80,7 +80,12 @@
   <!-- Meeting Progress Section -->
   <section class="pv-section" role="region" aria-label="سير الجلسة">
     <div class="section-header">سير الجلسة:</div>
-    <div class="pv-value">{{ transcription.Deroulement || 'غير متوفر' }}</div>
+    <div class="pv-value" *ngIf="transcription.Deroulement; else noDeroulement" markdown>
+      {{ transcription.Deroulement }}
+    </div>
+    <ng-template #noDeroulement>
+      <div class="pv-value">غير متوفر</div>
+    </ng-template>
   </section>
 
   <!-- Next Meeting Section -->

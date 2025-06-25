@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Transcription } from '../../../models/transcription.model';
 import { TranscriptionService } from '../../../services/transcription/transcription.service';
+import { MarkdownModule } from 'ngx-markdown';
 
 @Component({
 selector: 'pv-detail',
 standalone: true,
-imports: [CommonModule, FormsModule],
+imports: [CommonModule, MarkdownModule, FormsModule],
 templateUrl: './pv-detail.component.html',
 styleUrls: ['./pv-detail.component.css']
 })
