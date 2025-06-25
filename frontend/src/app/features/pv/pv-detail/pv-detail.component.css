@@ -23,8 +23,6 @@
   box-shadow: 
     0 10px 40px rgba(66, 54, 41, 0.1),
     0 2px 8px rgba(66, 54, 41, 0.06);
-  max-width: 900px;
-  margin: 2rem auto;
   padding: 3rem;
   position: relative;
   overflow: hidden;
