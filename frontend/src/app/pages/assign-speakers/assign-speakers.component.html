@@ -9,7 +9,7 @@
         </div>
         <div class="dropdown-container">
           <label for="member-{{speaker}}">Membre :</label>
-          <select id="member-{{speaker}}" [(ngModel)]="speakerMapping[speaker]" name="member-{{speaker}}" required>
+          <select id="member-{{speaker}}" [(ngModel)]="speakerMapping[speaker]" name="member-{{speaker}}" required [disabled]="isSaving">
             <option [ngValue]="null">-- Sélectionner un membre --</option>
             <option *ngFor="let member of members" [ngValue]="member">{{ member }}</option>
           </select>
@@ -17,8 +17,12 @@
       </div>
     </div>
     <div class="actions">
-      <button type="submit" class="save-btn">Enregistrer</button>
-      <button type="button" class="next-btn" (click)="onEditTranscription()">Modifier la transcription</button>
+      <button type="submit" class="save-btn" [disabled]="isSaving">
+        {{ isSaving ? 'Enregistrement...' : 'Enregistrer' }}
+      </button>
+      <button type="button" class="next-btn" (click)="onEditTranscription()" [disabled]="isSaving">
+        Modifier la transcription
+      </button>
     </div>
   </form>
 

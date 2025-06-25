@@ -15,6 +15,7 @@ export class EditTranscriptionComponent implements OnInit {
   pvId: string | null = null;
   transcription: { speaker: string, text: string }[] = [];
   isLoading = true;
+  isSaving = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -42,6 +43,7 @@ export class EditTranscriptionComponent implements OnInit {
 
   onSave() {
     if (this.pvId) {
+      this.isSaving = true;
       this.transcriptionService.updateTranscription(Number(this.pvId), {
         Transcription: this.transcription
       }).subscribe({
@@ -49,7 +51,17 @@ export class EditTranscriptionComponent implements OnInit {
           // Call generateDeroulement after successful update
           this.transcriptionService.generateDeroulement(Number(this.pvId)).subscribe({
             next: () => {
-              this.router.navigate(['/Home', 'pv', this.pvId, 'view-transcription']);
+              // Call generateAnalyse after generateDeroulement
+              this.transcriptionService.generateAnalyse(Number(this.pvId)).subscribe({
+                next: () => {
+                  this.router.navigate(['/Home', 'pv', this.pvId, 'view-transcription']);
+                },
+                error: (err) => {
+                  console.error('Échec de la génération de l\'analyse', err);
+                  // Still navigate even if generation fails
+                  this.router.navigate(['/Home', 'pv', this.pvId, 'view-transcription']);
+                }
+              });
             },
             error: (err) => {
               console.error('Échec de la génération du déroulement', err);
@@ -59,6 +71,7 @@ export class EditTranscriptionComponent implements OnInit {
           });
         },
         error: (err) => {
+          this.isSaving = false;
           console.error('Failed to update transcription', err);
         }
       });

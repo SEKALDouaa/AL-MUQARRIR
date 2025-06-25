@@ -18,6 +18,7 @@ export class AssignSpeakersComponent implements OnInit {
   speakerLabels: string[] = [];
   speakerMapping: { [key: string]: string | null } = {};
   isLoading = true;
+  isSaving = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -58,6 +59,7 @@ export class AssignSpeakersComponent implements OnInit {
       };
     });
     if (this.pvId) {
+      this.isSaving = true;
       this.transcriptionService.updateTranscription(Number(this.pvId), {
         Transcription: remappedTranscription
       }).subscribe({
@@ -65,7 +67,17 @@ export class AssignSpeakersComponent implements OnInit {
           // Call generateDeroulement after successful update
           this.transcriptionService.generateDeroulement(Number(this.pvId)).subscribe({
             next: () => {
-              this.router.navigate(['/Home', 'pv', this.pvId, 'view-transcription']);
+              // Call generateAnalyse after generateDeroulement
+              this.transcriptionService.generateAnalyse(Number(this.pvId)).subscribe({
+                next: () => {
+                  this.router.navigate(['/Home', 'pv', this.pvId, 'view-transcription']);
+                },
+                error: (err) => {
+                  console.error('Échec de la génération de l\'analyse', err);
+                  // Still navigate even if generation fails
+                  this.router.navigate(['/Home', 'pv', this.pvId, 'view-transcription']);
+                }
+              });
             },
             error: (err) => {
               console.error('Échec de la génération du déroulement', err);
@@ -75,6 +87,7 @@ export class AssignSpeakersComponent implements OnInit {
           });
         },
         error: (err) => {
+          this.isSaving = false;
           // Optionally show an error message
           console.error('Failed to update transcription', err);
         }
@@ -83,7 +96,8 @@ export class AssignSpeakersComponent implements OnInit {
   }
 
   onEditTranscription() {
-    if (this.pvId) {
+    if (this.pvId && !this.isSaving) {
+      this.isSaving = true;
       this.router.navigate(['/Home', 'pv', this.pvId, 'edit-transcription']);
     }
   }
