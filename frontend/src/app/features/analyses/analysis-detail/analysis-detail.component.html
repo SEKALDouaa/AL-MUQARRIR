@@ -2,7 +2,7 @@
 <div class="container p-4" *ngIf="transcription">
   <div class="analysis-markdown-block" *ngIf="editableContent; else noAnalysis">
     <h1 class="text-muted text-center"><i class="fas fa-chart-pie"></i> {{ title }}</h1>
-    <h1 class="mb-3 text-center"><i class="fas fa-book-open"></i> {{ transcription.titreSceance }}</h1>
+    <h1 class="mb-3 text-center">{{ transcription.titreSceance }}</h1>
     <br>
     <br>
     <markdown [data]="editableContent"></markdown>
