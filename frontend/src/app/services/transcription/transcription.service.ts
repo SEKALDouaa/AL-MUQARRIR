@@ -131,4 +131,11 @@ export class TranscriptionService {
       { headers: this.getAuthHeaders() }
     );
   }
+
+  exportPvPdfShift(id: number): Observable<Blob> {
+    return this.http.get(`${this.apiBase}/${id}/export/pdfshift`, {
+      headers: this.getAuthHeaders(),
+      responseType: 'blob',
+    });
+  }
 }

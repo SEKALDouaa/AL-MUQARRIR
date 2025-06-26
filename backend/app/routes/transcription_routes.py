@@ -156,3 +156,9 @@ def refine_transcription_segments(transcription_id):
     if not transcription:
         return jsonify({'message': 'Transcription not found'}), 404
     return transcription_shema.jsonify(transcription), 200
+
+@transcription_bp.route('/transcriptions/<int:transcription_id>/export/pdfshift', methods=['GET'])
+@jwt_required()
+def export_pv_pdfshift(transcription_id):
+    from ..services.transcription_service import export_transcription_pv_pdfshift
+    return export_transcription_pv_pdfshift(transcription_id)

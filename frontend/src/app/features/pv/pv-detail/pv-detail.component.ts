@@ -48,6 +48,12 @@ constructor(
     });
   }
 
+  exportPdfShift(): void {
+    this.service.exportPvPdfShift(this.transcription.id).subscribe(blob => {
+      this.download(blob as Blob, `${this.transcription.titreSceance}_pdfshift.pdf`);
+    });
+  }
+
   // Safely parse the transcription JSON or array
   parseTranscription(transcription: any): { speaker: string, text: string }[] {
     if (!transcription) return [];

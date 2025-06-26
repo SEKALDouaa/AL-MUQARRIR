@@ -14,6 +14,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 import arabic_reshaper
 from bidi.algorithm import get_display
 from decouple import config
+import markdown
 
 def create_transcription(data):
     data['dateSceance'] = datetime.strptime(data['dateSceance'], "%Y-%m-%d").date()
@@ -350,6 +351,71 @@ def export_transcription_analysis_arabe_pdf(transcription_id):
         buffer,
         as_attachment=True,
         download_name=f"تحليل_محضر_{transcription.titreSceance}.pdf",
+        mimetype="application/pdf"
+    )
+
+def export_transcription_pv_pdfshift(transcription_id):
+    """
+    Export the PV as a PDF using PDFShift API (Python requests), with Markdown-to-HTML conversion and correct Arabic rendering.
+    """
+    import requests
+    transcription = Transcription.query.get(transcription_id)
+    if not transcription:
+        return None
+
+    # Convert Deroulement from Markdown to HTML and wrap for RTL/Arabic font
+    deroulement_html = "غير متوفر"
+    if transcription.Deroulement:
+        deroulement_html = markdown.markdown(transcription.Deroulement)
+        deroulement_html = f'<div dir="rtl" style="font-family: Amiri, serif; font-size: 16px;">{deroulement_html}</div>'
+
+    # Build HTML content for the PV
+    html_content = f"""
+    <html>
+    <head>
+        <meta charset='utf-8'>
+        <title>محضر اجتماع</title>
+        <style>
+            body {{ direction: rtl; font-family: 'Amiri', serif; font-size: 16px; background: #f9f9f9; color: #222; margin: 0; padding: 30px; }}
+            h1 {{ font-family: 'Amiri', serif; font-size: 2.2em; color: #2a4d69; text-align: center; margin-bottom: 0.2em; }}
+            h2 {{ font-family: 'Amiri', serif; font-size: 1.5em; color: #4b86b4; text-align: center; margin-top: 0; margin-bottom: 1em; }}
+            p {{ margin: 0.5em 0 0.5em 0; line-height: 1.8; }}
+            b {{ color: #1b3b5a; }}
+            /* Inline styles for section-label and deroulement-block */
+        </style>
+    </head>
+    <body>
+    <h1>محضر اجتماع</h1>
+    <h2>{transcription.titreSceance}</h2>
+    <p><b>تاريخ الجلسة:</b> {transcription.dateSceance.strftime('%Y/%m/%d')}</p>
+    <p><b>الساعة:</b> {transcription.HeureDebut.strftime('%H:%M')} إلى {transcription.HeureFin.strftime('%H:%M')}</p>
+    <p><b>الرئيس:</b> {transcription.President}</p>
+    <p><b>الكاتب:</b> {transcription.Secretaire}</p>
+    <p><b>الأعضاء الحاضرون:</b> {transcription.Membres or 'لا يوجد'}</p>
+    {f'<p><b>الأعضاء الغائبون:</b> {transcription.Absents}</p>' if transcription.Absents else ''}
+    <p><b>جدول الأعمال:</b> {transcription.OrdreDuJour or 'غير متوفر'}</p>
+    <span style='font-weight:bold; color:#1b3b5a; margin-top:1.2em; display:block;'>سير الجلسة:</span>
+    <div style='background:#fff; border:1px solid #e0e0e0; border-radius:8px; padding:18px 20px; margin:1em 0; box-shadow:0 2px 8px #0001;'>{deroulement_html}</div>
+    {f'<p><b>تاريخ الاجتماع المقبل:</b> {transcription.DateProchaineReunion.strftime('%Y/%m/%d')}</p>' if transcription.DateProchaineReunion else ''}
+    </body></html>
+    """
+    api_key = config("PDFSHIT_KEY") 
+    response = requests.post(
+        'https://api.pdfshift.io/v3/convert/pdf',
+        headers={ 'X-API-Key': api_key },
+        json={
+            "source": html_content,
+            "landscape": False,
+            "use_print": False
+        }
+    )
+    response.raise_for_status()
+    from flask import send_file
+    import io
+    return send_file(
+        io.BytesIO(response.content),
+        as_attachment=True,
+        download_name=f"محضر_{transcription.titreSceance}.pdf",
         mimetype="application/pdf"
     )
 
