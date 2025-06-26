@@ -43,9 +43,11 @@ export class EditTranscriptionComponent implements OnInit {
 
   onSave() {
     if (this.pvId) {
+      // Preprocess: remove segments with blank text
+      const cleanedTranscription = this.transcription.filter(seg => seg.text && seg.text.trim() !== '');
       this.isSaving = true;
       this.transcriptionService.updateTranscription(Number(this.pvId), {
-        Transcription: this.transcription
+        Transcription: cleanedTranscription
       }).subscribe({
         next: () => {
           // Call generateDeroulement after successful update
