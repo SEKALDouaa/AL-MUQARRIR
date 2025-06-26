@@ -25,13 +25,13 @@
   <div class="text-center mt-3">
     <button class="custom-btn me-2" (click)="exportPdf()" [disabled]="exporting">
       <i class="fas fa-file-pdf" aria-hidden="true"></i>
-      <span *ngIf="!exporting">  Exporter PDF</span>
-      <span *ngIf="exporting">  Exporting...</span>
+      <span *ngIf="!exporting">   Exporter PDF</span>
+      <span *ngIf="exporting">   Exporting...</span>
     </button>
     <button class="custom-btn" (click)="exportDocx()" [disabled]="exporting">
       <i class="fas fa-file-word" aria-hidden="true"></i>
-      <span *ngIf="!exporting">  Exporter DOCX</span>
-      <span *ngIf="exporting">  Exporting...</span>
+      <span *ngIf="!exporting">   Exporter DOCX</span>
+      <span *ngIf="exporting">   Exporting...</span>
     </button>
   </div>
 </div>

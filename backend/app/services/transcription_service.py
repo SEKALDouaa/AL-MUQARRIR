@@ -149,7 +149,9 @@ def export_transcription_pv_arabe_docx(transcription_id):
 
     for i in range(len(fields)):
         value, label = fields[i]
-        if i==0 and i >= 2:
+        if i == 0: 
+            add_arabic_paragraph(f"{label} :{value}", font_size=Pt(14))
+        elif  i >= 2:
             add_arabic_paragraph(f"{label} :{value}", font_size=Pt(14))
         else:
             add_arabic_paragraph(f"{value} :{label}", font_size=Pt(14))
