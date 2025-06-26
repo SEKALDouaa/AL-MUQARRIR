@@ -146,8 +146,13 @@ def refine_transcription_segments(transcription_id):
         return jsonify({'message': 'No segments provided'}), 400
     # segments is expected to be a list of dicts: [{speaker: text}, ...]
     refined_segments = process_refinement_with_gemini(segments, model)
+    # Convert [{SPEAKER_XX: text}, ...] to [{"speaker": "SPEAKER_XX", "text": text}, ...]
+    converted_segments = []
+    for seg in refined_segments:
+        for speaker, text in seg.items():
+            converted_segments.append({"speaker": speaker, "text": text})
     # Update the transcription in the DB (assume update_transcription_segments exists)
-    transcription = update_transcription_segments(transcription_id, refined_segments)
+    transcription = update_transcription_segments(transcription_id, converted_segments)
     if not transcription:
         return jsonify({'message': 'Transcription not found'}), 404
     return transcription_shema.jsonify(transcription), 200

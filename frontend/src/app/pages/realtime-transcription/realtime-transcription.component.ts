@@ -520,7 +520,7 @@ export class RealtimeTranscriptionComponent implements OnInit, AfterViewInit, On
   private handleError(message: string, error: any): void {
     console.error(message, error);
     this.updateStatus(
-      `${message}: ${error.message || 'Erreur inconnue'}`,
+      'Erreur inconnue',
       'error'
     );
   }
@@ -538,11 +538,15 @@ export class RealtimeTranscriptionComponent implements OnInit, AfterViewInit, On
 
   // Add navigation to assign speakers
   goToAssignSpeakers() {
+    // Stop recording if still active before proceeding
+    if (this.isRecording) {
+      this.stopRecording();
+    }
     if (this.pvId && this.transcriptionResults.length) {
       // Prepare segments for backend refinement
       const segments = this.transcriptionResults.map(seg => ({ [seg.speaker]: seg.text }));
       this.isRefining = true;
-      this.updateStatus('Affinage de la transcription...', 'loading');
+      this.updateStatus('Affichage de la transcription...', 'loading');
       this.transcriptionService.refineTranscription(Number(this.pvId), segments).subscribe({
         next: (refined) => {
           // Update local results with refined segments (preserve structure)
@@ -556,12 +560,14 @@ export class RealtimeTranscriptionComponent implements OnInit, AfterViewInit, On
             // fallback: do not update if parsing fails
           }
           this.isRefining = false;
-          this.updateStatus('Transcription affinée', '');
-          window.location.href = `/Home/pv/${this.pvId}/assign-speakers`;
+          // Delay navigation to allow UI update
+          setTimeout(() => {
+            window.location.href = `/Home/pv/${this.pvId}/assign-speakers`;
+          }, 600);
         },
         error: (err) => {
           this.isRefining = false;
-          this.handleError('Échec de l\'affinage de la transcription', err);
+          this.handleError('Échec de l\'affichage de la transcription', err);
         }
       });
     } else if (this.pvId) {

@@ -61,15 +61,41 @@ export class DashboardComponent implements OnInit {
       // Calendar logic
       const month = this.currentMonth + 1;
       this.daysInMonth = Array.from({length: new Date(this.currentYear, month, 0).getDate()}, (_, i) => i + 1);
-      // Only show meetings after today in the calendar
-      this.meetingDays = new Set(
-        this.transcriptions
+      // Mark all meeting days in the current month for both dateSceance and DateProchaineReunion (if >= today)
+      const todayDay = today.getDate();
+      const todayMonth = today.getMonth();
+      const todayYear = today.getFullYear();
+      this.meetingDays = new Set([
+        ...this.transcriptions
           .map(t => {
             const d = new Date(t.dateSceance);
-            return d.getMonth() === this.currentMonth && d.getFullYear() === this.currentYear && d >= today ? d.getDate() : null;
+            // Only color if in current month/year and >= today
+            if (
+              d.getMonth() === this.currentMonth &&
+              d.getFullYear() === this.currentYear &&
+              (d > today || (d.getDate() === todayDay && d.getMonth() === todayMonth && d.getFullYear() === todayYear))
+            ) {
+              return d.getDate();
+            }
+            return null;
+          })
+          .filter((d): d is number => d !== null),
+        ...this.transcriptions
+          .map(t => {
+            if (!t.DateProchaineReunion) return null;
+            const d = new Date(t.DateProchaineReunion);
+            // Only color if in current month/year and >= today
+            if (
+              d.getMonth() === this.currentMonth &&
+              d.getFullYear() === this.currentYear &&
+              (d > today || (d.getDate() === todayDay && d.getMonth() === todayMonth && d.getFullYear() === todayYear))
+            ) {
+              return d.getDate();
+            }
+            return null;
           })
           .filter((d): d is number => d !== null)
-      );
+      ]);
       // Calculate empty days for calendar grid
       const jsFirstDay = new Date(this.currentYear, this.currentMonth, 1).getDay();
       // Adjust for Monday as first day (jsFirstDay: 0=Sunday, 1=Monday...)

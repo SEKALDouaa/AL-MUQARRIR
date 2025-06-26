@@ -1,5 +1,12 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <div class="main-container">
+    <!-- Loader Overlay: moved here for full-page coverage -->
+    <div *ngIf="isRefining" class="loader-overlay">
+        <div class="loader-spinner">
+            <i class="fa fa-spinner fa-spin fa-3x"></i>
+            <div class="loader-text">Affichage de la transcription en cours...</div>
+        </div>
+    </div>
     <div class="transcription-container">
         <!-- Header Section -->
         <div class="header-section">
@@ -12,14 +19,6 @@
             <div class="status-indicator" [ngClass]="statusClass">
                 <div class="status-dot"></div>
                 <span class="status-text">{{ status }}</span>
-            </div>
-        </div>
-
-        <!-- Loader Overlay -->
-        <div *ngIf="isRefining" class="loader-overlay">
-            <div class="loader-spinner">
-                <i class="fa fa-spinner fa-spin fa-3x"></i>
-                <div class="loader-text">Affinage de la transcription en cours...</div>
             </div>
         </div>
 
