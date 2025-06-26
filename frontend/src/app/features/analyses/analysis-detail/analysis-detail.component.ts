@@ -17,6 +17,7 @@ export class AnalysisDetailComponent implements OnInit {
   transcription!: Transcription;
   editableContent: string = '';
   title = 'تحليل الجلسة';
+  exporting: boolean = false; // Add exporting flag
 
   constructor(
     private route: ActivatedRoute,
@@ -37,14 +38,24 @@ export class AnalysisDetailComponent implements OnInit {
   }
 
   exportDocx(): void {
-    this.service.exportAnalysisDocx(this.transcription.id).subscribe(blob => {
-      this.download(blob, `${this.transcription.titreSceance}_analyse.docx`);
+    this.exporting = true;
+    this.service.exportAnalysisDocx(this.transcription.id).subscribe({
+      next: blob => {
+        this.download(blob, `${this.transcription.titreSceance}_analyse.docx`);
+        this.exporting = false;
+      },
+      error: () => { this.exporting = false; }
     });
   }
 
   exportPdf(): void {
-    this.service.exportAnalysisPdf(this.transcription.id).subscribe(blob => {
-      this.download(blob, `${this.transcription.titreSceance}_analyse.pdf`);
+    this.exporting = true;
+    this.service.exportAnalysisPdf(this.transcription.id).subscribe({
+      next: blob => {
+        this.download(blob, `${this.transcription.titreSceance}_analyse.pdf`);
+        this.exporting = false;
+      },
+      error: () => { this.exporting = false; }
     });
   }
 

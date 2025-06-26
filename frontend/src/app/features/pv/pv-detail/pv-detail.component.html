@@ -105,14 +105,15 @@
 
   <!-- Action Buttons -->
   <div class="button-container" role="group" aria-label="إجراءات المحضر">
-    <button class="custom-btn" (click)="exportPdfShift()" type="button" aria-label="Exporter PDFShift">
+    <button class="custom-btn" (click)="exportPdfShift()" type="button" aria-label="Exporter PDFShift" [disabled]="exporting">
       <i class="fas fa-file-pdf" aria-hidden="true"></i>
-      Exporter PDF
+      <span *ngIf="!exporting">Exporter PDF</span>
+      <span *ngIf="exporting">Exporting...</span>
     </button>
-    <button class="custom-btn" (click)="exportDocx()" type="button" aria-label="Exporter en Word">
+    <button class="custom-btn" (click)="exportDocx()" type="button" aria-label="Exporter en Word" [disabled]="exporting">
       <i class="fas fa-file-word" aria-hidden="true"></i>
-      Exporter DOCX
+      <span *ngIf="!exporting">Exporter DOCX</span>
+      <span *ngIf="exporting">Exporting...</span>
     </button>
-    
   </div>
 </div>

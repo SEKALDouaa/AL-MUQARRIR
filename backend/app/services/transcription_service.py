@@ -15,6 +15,9 @@ import arabic_reshaper
 from bidi.algorithm import get_display
 from decouple import config
 import markdown
+import markdown2
+from bs4 import BeautifulSoup
+from docx.shared import Pt
 
 def create_transcription(data):
     data['dateSceance'] = datetime.strptime(data['dateSceance'], "%Y-%m-%d").date()
@@ -110,54 +113,113 @@ def get_ngrok_url():
 
 # ----------- Export PV DOCX -----------
 def export_transcription_pv_arabe_docx(transcription_id):
+    
     transcription = Transcription.query.get(transcription_id)
     if not transcription:
         return None
 
     doc = Document()
 
-    def add_arabic_paragraph(text, bold=False):
+    def add_arabic_paragraph(text, bold=False, font_size=None):
         p = doc.add_paragraph()
         run = p.add_run(text)
         if bold:
             run.bold = True
+        if font_size:
+            run.font.size = font_size
         p.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
         return p
 
-    add_arabic_paragraph("محضر اجتماع", bold=True)
+    
+
+    add_arabic_paragraph("محضر اجتماع", bold=True, font_size=Pt(20))
 
     fields = [
         (transcription.titreSceance, "عنوان الجلسة"),
         (transcription.dateSceance.strftime('%Y/%m/%d'), "تاريخ الجلسة"),
-        (f"{transcription.HeureDebut.strftime('%H:%M')} إلى {transcription.HeureFin.strftime('%H:%M')}", "الساعة"),
+        (
+            f"{transcription.HeureDebut.strftime('%H:%M')} إلى {transcription.HeureFin.strftime('%H:%M')}"
+            if transcription.HeureDebut and transcription.HeureFin else "غير متوفر",
+            "الساعة"
+        ),
         (transcription.President, "الرئيس"),
         (transcription.Secretaire, "الكاتب"),
     ]
 
-    for value, label in fields:
-        add_arabic_paragraph(f"{value} :{label}")
+    for i in range(len(fields)):
+        value, label = fields[i]
+        if i==0 and i >= 2:
+            add_arabic_paragraph(f"{label} :{value}", font_size=Pt(14))
+        else:
+            add_arabic_paragraph(f"{value} :{label}", font_size=Pt(14))
+        
+    
 
     doc.add_paragraph()
-    add_arabic_paragraph(":الأعضاء الحاضرون", bold=True)
-    add_arabic_paragraph(transcription.Membres or "لا يوجد")
+    add_arabic_paragraph(":الأعضاء الحاضرون", bold=True, font_size=Pt(20))
+    membres = (transcription.Membres or "").split(',')
+    for membre in membres:
+        membre = membre.strip()
+        if membre:
+            add_arabic_paragraph(f" {membre} -", font_size=Pt(14))
 
     if transcription.Absents:
         doc.add_paragraph()
-        add_arabic_paragraph(":الأعضاء الغائبون", bold=True)
-        add_arabic_paragraph(transcription.Absents)
+        add_arabic_paragraph(":الأعضاء الغائبون", bold=True, font_size=Pt(20))
+        absents = transcription.Absents.split(',')
+        for absent in absents:
+            absent = absent.strip()
+            if absent:
+                add_arabic_paragraph(f" {absent} -", font_size=Pt(14))
 
     doc.add_paragraph()
-    add_arabic_paragraph(":جدول الأعمال", bold=True)
-    add_arabic_paragraph(transcription.OrdreDuJour or "غير متوفر")
+    add_arabic_paragraph(":جدول الأعمال", bold=True, font_size=Pt(20))
+    add_arabic_paragraph(transcription.OrdreDuJour or "غير متوفر", font_size=Pt(14))
 
     doc.add_paragraph()
-    add_arabic_paragraph(":سير الجلسة", bold=True)
-    add_arabic_paragraph(transcription.Deroulement or "غير متوفر")
+    add_arabic_paragraph(":سير الجلسة", bold=True, font_size=Pt(20))
+    # --- Markdown to HTML to DOCX ---
+    if transcription.Deroulement:
+        deroulement_html = markdown2.markdown(transcription.Deroulement)
+        soup = BeautifulSoup(deroulement_html, "html.parser")
+        for elem in soup.contents:
+            # Remove any element containing 'سير الجلسة'
+            if 'سير الجلسة' in elem.get_text():
+                continue
+            if elem.name == 'p':
+                text = elem.get_text().strip()
+                if not text:
+                    continue  # Skip empty paragraphs
+                add_arabic_paragraph(text, font_size=Pt(14))
+            elif elem.name == 'ul':
+                for li in elem.find_all('li'):
+                    li_text = li.get_text().strip()
+                    if not li_text:
+                        continue
+                    add_arabic_paragraph(f"• {li_text}", font_size=Pt(14))
+            elif elem.name == 'ol':
+                for idx, li in enumerate(elem.find_all('li'), 1):
+                    li_text = li.get_text().strip()
+                    if not li_text:
+                        continue
+                    add_arabic_paragraph(f"{idx}. {li_text}", font_size=Pt(14))
+            elif elem.name == 'strong' or elem.name == 'b':
+                strong_text = elem.get_text().strip()
+                if not strong_text:
+                    continue
+                add_arabic_paragraph(strong_text, bold=True, font_size=Pt(14))
+            elif elem.name is None:
+                plain_text = str(elem).strip()
+                if not plain_text:
+                    continue
+                add_arabic_paragraph(plain_text, font_size=Pt(14))
+    else:
+        add_arabic_paragraph("غير متوفر", font_size=Pt(14))
 
     if transcription.DateProchaineReunion:
         doc.add_paragraph()
-        add_arabic_paragraph(":تاريخ الاجتماع المقبل", bold=True)
-        add_arabic_paragraph(transcription.DateProchaineReunion.strftime('%Y/%m/%d'))
+        add_arabic_paragraph(":تاريخ الاجتماع المقبل", bold=True, font_size=Pt(20))
+        add_arabic_paragraph(transcription.DateProchaineReunion.strftime('%Y/%m/%d'), font_size=Pt(14))
 
     doc.add_paragraph()
     p_points = doc.add_paragraph("..............  حرر بمدينة .............. في تاريخ  ")
@@ -175,6 +237,7 @@ def export_transcription_pv_arabe_docx(transcription_id):
         download_name=f"محضر_{transcription.titreSceance}.docx",
         mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     )
+
 
 # ----------- Export PV PDF -----------
 def export_transcription_pv_arabe_pdf(transcription_id):
@@ -428,3 +491,65 @@ def update_transcription_segments(transcription_id, refined_segments):
     transcription.Transcription = json.dumps(refined_segments, ensure_ascii=False)
     db.session.commit()
     return transcription
+
+def export_transcription_analysis_arabe_pdfshift(transcription_id):
+    """
+    Export the analysis as a PDF using PDFShift API, with Markdown-to-HTML conversion and correct Arabic rendering.
+    """
+    import requests
+    transcription = Transcription.query.get(transcription_id)
+    if not transcription or not transcription.Analyse:
+        return None
+
+    # Convert Analyse from Markdown to HTML and wrap for RTL/Arabic font
+    import markdown2
+    analyse_html = markdown2.markdown(
+        transcription.Analyse,
+        extras=["biblio", "fenced-code-blocks", "tables", "strike", "cuddled-lists", "footnotes"]
+    )
+    analyse_html = f'<div dir="rtl" style="font-family: Amiri, serif; font-size: 16px;">{analyse_html}</div>'
+
+    # Build HTML content for the Analysis
+    html_content = f"""
+    <html>
+    <head>
+        <meta charset='utf-8'>
+        <title>تحليل محضر الاجتماع</title>
+        <style>
+            body {{ direction: rtl; font-family: 'Amiri', serif; font-size: 16px; background: #f9f9f9; color: #222; margin: 0; padding: 30px; }}
+            h1 {{ font-family: 'Amiri', serif; font-size: 2.2em; color: #2a4d69; text-align: center; margin-bottom: 0.2em; }}
+            h2 {{ font-family: 'Amiri', serif; font-size: 1.5em; color: #4b86b4; text-align: center; margin-top: 0; margin-bottom: 1em; }}
+            p {{ margin: 0.5em 0 0.5em 0; line-height: 1.8; }}
+            b, strong {{ color: #1b3b5a; }}
+            ul, ol {{ margin-right: 2em; }}
+            li {{ margin-bottom: 0.5em; }}
+            table {{ border-collapse: collapse; width: 100%; margin: 1em 0; }}
+            th, td {{ border: 1px solid #aaa; padding: 8px; text-align: right; }}
+            code, pre {{ background: #f4f4f4; border-radius: 4px; padding: 2px 6px; font-family: 'Cascadia Mono', 'Consolas', monospace; }}
+        </style>
+    </head>
+    <body>
+    <h1>تحليل محضر الاجتماع</h1>
+    <h2>{transcription.titreSceance}</h2>
+    {analyse_html}
+    </body></html>
+    """
+    api_key = config("PDFSHIT_KEY")
+    response = requests.post(
+        'https://api.pdfshift.io/v3/convert/pdf',
+        headers={ 'X-API-Key': api_key },
+        json={
+            "source": html_content,
+            "landscape": False,
+            "use_print": False
+        }
+    )
+    response.raise_for_status()
+    from flask import send_file
+    import io
+    return send_file(
+        io.BytesIO(response.content),
+        as_attachment=True,
+        download_name=f"تحليل_محضر_{transcription.titreSceance}.pdf",
+        mimetype="application/pdf"
+    )

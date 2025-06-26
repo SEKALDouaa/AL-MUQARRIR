@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from ..services.transcription_service import create_transcription, get_transcription_by_id, get_all_transcriptions, delete_transcription, update_transcription, search_transcriptions,get_ngrok_url
 from ..schemas.transcription_schema import TranscriptionSchema
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from ..services.transcription_service import update_transcription_with_deroulement, update_transcription_with_analysis, export_transcription_pv_arabe_docx, export_transcription_pv_arabe_pdf, export_transcription_analysis_arabe_docx, export_transcription_analysis_arabe_pdf
+from ..services.transcription_service import export_transcription_pv_pdfshift,export_transcription_analysis_arabe_pdfshift,update_transcription_with_deroulement, update_transcription_with_analysis, export_transcription_pv_arabe_docx, export_transcription_pv_arabe_pdf, export_transcription_analysis_arabe_docx, export_transcription_analysis_arabe_pdf
 from ..services.ai_services import process_refinement_with_gemini, model
 from ..services.transcription_service import update_transcription_segments
 
@@ -127,7 +127,7 @@ def export_analysis_docx(transcription_id):
 @transcription_bp.route('/transcriptions/<int:transcription_id>/export/analysis/pdf', methods=['GET'])
 @jwt_required()
 def export_analysis_pdf(transcription_id):
-    return export_transcription_analysis_arabe_pdf(transcription_id)
+    return export_transcription_analysis_arabe_pdfshift(transcription_id)
 
 @transcription_bp.route('/transcriptions/ngrok_url', methods=['GET'])
 @jwt_required()
@@ -160,5 +160,4 @@ def refine_transcription_segments(transcription_id):
 @transcription_bp.route('/transcriptions/<int:transcription_id>/export/pdfshift', methods=['GET'])
 @jwt_required()
 def export_pv_pdfshift(transcription_id):
-    from ..services.transcription_service import export_transcription_pv_pdfshift
     return export_transcription_pv_pdfshift(transcription_id)

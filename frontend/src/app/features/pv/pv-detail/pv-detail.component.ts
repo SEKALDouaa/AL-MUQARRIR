@@ -14,14 +14,15 @@ templateUrl: './pv-detail.component.html',
 styleUrls: ['./pv-detail.component.css']
 })
 export class PvDetailComponent implements OnInit {
-transcription!: Transcription;
-editableContent: string = '';
-title = 'Pv';
+  transcription!: Transcription;
+  editableContent: string = '';
+  title = 'Pv';
+  exporting: boolean = false; // Flag to disable export buttons
 
-constructor(
-    private route: ActivatedRoute,
-    private service: TranscriptionService
-  ) {}
+  constructor(
+      private route: ActivatedRoute,
+      private service: TranscriptionService
+    ) {}
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -37,20 +38,35 @@ constructor(
   }
 
   exportDocx(): void {
-    this.service.exportPvDocx(this.transcription.id).subscribe(blob => {
-      this.download(blob, `${this.transcription.titreSceance}_pv.docx`);
+    this.exporting = true;
+    this.service.exportPvDocx(this.transcription.id).subscribe({
+      next: blob => {
+        this.download(blob, `${this.transcription.titreSceance}_pv.docx`);
+        this.exporting = false;
+      },
+      error: () => { this.exporting = false; }
     });
   }
 
   exportPdf(): void {
-    this.service.exportPvPdf(this.transcription.id).subscribe(blob => {
-      this.download(blob, `${this.transcription.titreSceance}_pv.pdf`);
+    this.exporting = true;
+    this.service.exportPvPdf(this.transcription.id).subscribe({
+      next: blob => {
+        this.download(blob, `${this.transcription.titreSceance}_pv.pdf`);
+        this.exporting = false;
+      },
+      error: () => { this.exporting = false; }
     });
   }
 
   exportPdfShift(): void {
-    this.service.exportPvPdfShift(this.transcription.id).subscribe(blob => {
-      this.download(blob as Blob, `${this.transcription.titreSceance}_pdfshift.pdf`);
+    this.exporting = true;
+    this.service.exportPvPdfShift(this.transcription.id).subscribe({
+      next: blob => {
+        this.download(blob as Blob, `${this.transcription.titreSceance}_pdfshift.pdf`);
+        this.exporting = false;
+      },
+      error: () => { this.exporting = false; }
     });
   }
 
