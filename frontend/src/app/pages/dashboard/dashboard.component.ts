@@ -90,12 +90,9 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/Home/pv-list']);
   }
 
-  openDocumentation() {
-    window.open('/assets/user-guide.pdf', '_blank');
-  }
-
+  
   contactSupport() {
-    window.location.href = 'mailto:support@yourdomain.com';
+    window.location.href = 'mailto: AL-MUQARRIR&#64gmail.com';
   }
 
   goToDocumentation() {
