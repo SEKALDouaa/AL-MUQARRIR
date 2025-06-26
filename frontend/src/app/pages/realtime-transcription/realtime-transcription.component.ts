@@ -64,6 +64,9 @@ export class RealtimeTranscriptionComponent implements OnInit, AfterViewInit, On
   pvId: string | null = null;
   private API_URL = '';
 
+  // Refinement state
+  isRefining = false;
+
   constructor(
     private transcriptionService: TranscriptionService,
     private route: ActivatedRoute
@@ -536,14 +539,29 @@ export class RealtimeTranscriptionComponent implements OnInit, AfterViewInit, On
   // Add navigation to assign speakers
   goToAssignSpeakers() {
     if (this.pvId && this.transcriptionResults.length) {
-      // Prepare segments for backend update
-      const segments = this.transcriptionResults.map(seg => ({ speaker: seg.speaker, text: seg.text }));
-      this.transcriptionService.updateTranscription(Number(this.pvId), { Transcription: segments }).subscribe({
-        next: () => {
+      // Prepare segments for backend refinement
+      const segments = this.transcriptionResults.map(seg => ({ [seg.speaker]: seg.text }));
+      this.isRefining = true;
+      this.updateStatus('Affinage de la transcription...', 'loading');
+      this.transcriptionService.refineTranscription(Number(this.pvId), segments).subscribe({
+        next: (refined) => {
+          // Update local results with refined segments (preserve structure)
+          try {
+            const refinedSegments = JSON.parse(refined.Transcription || '[]');
+            this.transcriptionResults = refinedSegments.map((seg: any) => {
+              const speaker = Object.keys(seg)[0];
+              return { speaker, text: seg[speaker] };
+            });
+          } catch (e) {
+            // fallback: do not update if parsing fails
+          }
+          this.isRefining = false;
+          this.updateStatus('Transcription affinée', '');
           window.location.href = `/Home/pv/${this.pvId}/assign-speakers`;
         },
         error: (err) => {
-          this.handleError('Échec de la mise à jour de la transcription', err);
+          this.isRefining = false;
+          this.handleError('Échec de l\'affinage de la transcription', err);
         }
       });
     } else if (this.pvId) {

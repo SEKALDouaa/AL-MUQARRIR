@@ -15,10 +15,18 @@
             </div>
         </div>
 
+        <!-- Loader Overlay -->
+        <div *ngIf="isRefining" class="loader-overlay">
+            <div class="loader-spinner">
+                <i class="fa fa-spinner fa-spin fa-3x"></i>
+                <div class="loader-text">Affinage de la transcription en cours...</div>
+            </div>
+        </div>
+
         <!-- Control Panel -->
         <div class="control-panel">
             <div class="control-buttons">
-                <button (click)="startRecording()" [disabled]="isRecording" class="control-btn record-btn"
+                <button (click)="startRecording()" [disabled]="isRecording || isRefining" class="control-btn record-btn"
                     [class.pulse]="isRecording">
                     <div class="btn-icon">
                         <i class="fa fa-microphone"></i>
@@ -26,7 +34,7 @@
                     <span>{{ getRecordingButtonLabel() }}</span>
                 </button>
 
-                <button (click)="stopRecording()" [disabled]="!isRecording" class="control-btn stop-btn">
+                <button (click)="stopRecording()" [disabled]="!isRecording || isRefining" class="control-btn stop-btn">
                     <div class="btn-icon">
                         <i class="fa fa-stop"></i>
                     </div>
@@ -87,7 +95,7 @@
 
         <!-- Assign Speakers Button -->
         <div class="next-step-btn-wrapper" *ngIf="transcriptionResults.length">
-            <button class="btn btn-success" (click)="goToAssignSpeakers()">
+            <button class="btn btn-success" (click)="goToAssignSpeakers()" [disabled]="isRefining">
                 Suivant <i class="fa fa-arrow-right"></i>
             </button>
         </div>

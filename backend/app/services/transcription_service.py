@@ -352,3 +352,13 @@ def export_transcription_analysis_arabe_pdf(transcription_id):
         download_name=f"تحليل_محضر_{transcription.titreSceance}.pdf",
         mimetype="application/pdf"
     )
+
+def update_transcription_segments(transcription_id, refined_segments):
+    import json
+    transcription = Transcription.query.get(transcription_id)
+    if not transcription:
+        return None
+    # Store as JSON string for compatibility
+    transcription.Transcription = json.dumps(refined_segments, ensure_ascii=False)
+    db.session.commit()
+    return transcription

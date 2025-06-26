@@ -120,4 +120,15 @@ export class TranscriptionService {
       headers: this.getAuthHeaders(),
     });
   }
+
+  refineTranscription(
+    id: number,
+    segments: { [speaker: string]: string }[]
+  ): Observable<Transcription> {
+    return this.http.post<Transcription>(
+      `${this.apiBase}/${id}/refine`,
+      { segments },
+      { headers: this.getAuthHeaders() }
+    );
+  }
 }

@@ -3,6 +3,8 @@ from ..services.transcription_service import create_transcription, get_transcrip
 from ..schemas.transcription_schema import TranscriptionSchema
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..services.transcription_service import update_transcription_with_deroulement, update_transcription_with_analysis, export_transcription_pv_arabe_docx, export_transcription_pv_arabe_pdf, export_transcription_analysis_arabe_docx, export_transcription_analysis_arabe_pdf
+from ..services.ai_services import process_refinement_with_gemini, model
+from ..services.transcription_service import update_transcription_segments
 
 transcription_bp = Blueprint('transcription_bp', __name__)
 
@@ -133,3 +135,19 @@ def ngrok_url():
     # Try to get from environment variable or config
     ngrok_url = get_ngrok_url()
     return jsonify({'ngrok_url': ngrok_url})
+
+@transcription_bp.route('/transcriptions/<int:transcription_id>/refine', methods=['POST'])
+@jwt_required()
+def refine_transcription_segments(transcription_id):
+    current_user = get_jwt_identity()
+    data = request.get_json()
+    segments = data.get('segments')
+    if not segments:
+        return jsonify({'message': 'No segments provided'}), 400
+    # segments is expected to be a list of dicts: [{speaker: text}, ...]
+    refined_segments = process_refinement_with_gemini(segments, model)
+    # Update the transcription in the DB (assume update_transcription_segments exists)
+    transcription = update_transcription_segments(transcription_id, refined_segments)
+    if not transcription:
+        return jsonify({'message': 'Transcription not found'}), 404
+    return transcription_shema.jsonify(transcription), 200
