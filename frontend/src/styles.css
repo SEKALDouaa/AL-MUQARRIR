@@ -29,50 +29,77 @@
     position: relative;
     overflow: hidden;
     margin: 0 0 6px;
-    padding: 50px 30px 50px 30px;
-    border-radius: 15px !important;
+    padding: 18px 32px 18px 32px;
+    border-radius: 14px !important;
     background-position: 15px center;
     background-repeat: no-repeat;
     background-size: 24px;
-    box-shadow: 0 0 12px #999;
+    box-shadow: 0 2px 16px #0002;
     color: #fff;
-    border: 4px solid green !important;
+    font-family: 'Amiri', 'Cairo', 'Segoe UI', Arial, sans-serif;
+    font-size: 1.08rem;
+    border: none;
 }
 
-/* Specific style for SUCCESS toasts */
+/* SUCCESS: Green border, white background, dark text */
 #toast-container > .toast-success {
-  background-color: #fff !important; /* Light background */
-  border: 4px solid #28a745 !important; /* Green border */
-  border-radius: 10px !important;
-  padding: 5px 5px 5px 5px;
-  font-weight: bold;
+  background-color: rgba(234, 250, 241, 0.7) !important;
+  border: 2.5px solid #28a745 !important;
+  color: #7b3131 !important;
+  font-weight: 700;
+  box-shadow: 0 2px 12px #28a74522;
 }
 
-/* Specific style for ERROR toasts */
+/* ERROR: Red border, white background, dark text */
 #toast-container > .toast-error {
-  background-color: #ffffff !important; /* Light background */
-  border: 4px solid #dc3545 !important; /* Red border */
-  border-radius: 10px !important;
-  padding: 5px 10px 10px 10px;
-  font-weight: bold;
+  background-color: rgba(255, 246, 246, 0.7) !important;
+  border: 2.5px solid #7b3131 !important;
+  color: #7b3131 !important;
+  font-weight: 700;
+  box-shadow: 0 2px 12px #7b313122;
 }
 
-/* Override the text color for toast-success and toast-error to a dark color so messages are visible */
+/* INFO: Project blue background, white text */
+#toast-container > .toast-info {
+  background-color: rgba(42, 77, 105, 0.92) !important;
+  border: 2.5px solid #2a4d69 !important;
+  color: #fff !important;
+  font-weight: 500;
+  box-shadow: 0 2px 12px #2a4d6922;
+}
+
+/* WARNING: Gold/yellow background, dark text */
+#toast-container > .toast-warning {
+  background-color: rgba(255, 251, 230, 0.92) !important;
+  border: 2.5px solid #ffc107 !important;
+  color: #1b3b5a !important;
+  font-weight: 600;
+  box-shadow: 0 2px 12px #ffc10722;
+}
+
 #toast-container > .toast-success,
-#toast-container > .toast-error {
-  color: #000000 !important;
+#toast-container > .toast-error,
+#toast-container > .toast-info,
+#toast-container > .toast-warning {
   display: flex !important;
   justify-content: center !important;
-  align-items: center !important ;
+  align-items: center !important;
 }
 
 /* Make the close button more visible */
-.toast-close-button {
-    color: #ffffff !important;
-    opacity: 0.8 !important;
+#toast-container > .toast-close-button {
+    color: #7b3131 !important;
+    background: transparent !important;
+    border: none !important;
+    opacity: 1 !important;
     text-shadow: none !important;
+    font-size: 1.3em !important;
+    font-weight: bold !important;
+    transition: background 0.2s, color 0.2s;
 }
 
-.toast-close-button:hover {
+#toast-container > .toast-close-button:hover {
+    background: #fff !important;
+    color: #fff !important;
     opacity: 1 !important;
 }

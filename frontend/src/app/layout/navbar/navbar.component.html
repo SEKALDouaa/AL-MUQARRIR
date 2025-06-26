@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark px-3" [ngStyle]="{ 'background-color': theme.navbar }">
-  <a class="navbar-brand d-flex align-items-center" href="/Home/dashboard">
+  <a class="navbar-brand d-flex align-items-center" [routerLink]="isRootPage ? null : '/Home/dashboard'" [class.disabled]="isRootPage" style="cursor: pointer;">
     <img src="assets/Images/Logo (1).svg" alt="logo" class="navbar-logo me-2">
   </a>
 
@@ -9,14 +9,12 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarContent">
-
     <div class="d-flex ms-auto align-items-center gap-3">
-      <div
+      <div *ngIf="!isRootPage"
         class="search-container"
         [class.expanded]="searchExpanded"
         [class.loading]="isLoading"
-        (click)="toggleSearch($event)"
-      >
+        (click)="toggleSearch($event)">
         <i class="bi bi-search search-icon"></i>
         <input
           #searchInput
@@ -42,8 +40,7 @@
             <div 
               class="search-result-item" 
               *ngFor="let pv of searchResults; trackBy: trackByPvId"
-              (click)="goToPvDetail(pv.id, $event)"
-            >
+              (click)="goToPvDetail(pv.id, $event)">
               <i class="bi bi-file-earmark-text me-2"></i>
               <span>{{ pv.titreSceance }}</span>
             </div>
@@ -67,19 +64,14 @@
         <span class="divider">|</span>
         <span [class.active]="currentLang === 'AR'">AR</span>
       </div>
-
-
       <button
         class="help-btn"
         placement="bottom"
         ngbTooltip="Aide / Informations"
         (click)="goToDocumentation()"
-      >
+        *ngIf="!isRootPage">
         <i class="bi bi-question-circle"></i>
       </button>
-
-
-
     </div>
   </div>
 </nav>

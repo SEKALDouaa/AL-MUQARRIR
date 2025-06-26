@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HostListener } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TranscriptionService } from '../../services/transcription/transcription.service';
 import { Transcription } from '../../models/transcription.model';
 import { FormsModule } from '@angular/forms';
@@ -10,7 +10,7 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
@@ -23,6 +23,7 @@ export class NavbarComponent {
   searchResults: Transcription[] = [];
   showResults = false;
   isLoading = false;
+  isRootPage = false;
   
   private searchSubject = new Subject<string>();
 
@@ -33,6 +34,10 @@ export class NavbarComponent {
       distinctUntilChanged() // Only search if the term actually changed
     ).subscribe(searchTerm => {
       this.performSearch(searchTerm);
+    });
+
+    this.router.events.subscribe(() => {
+      this.isRootPage = this.router.url === '/' || this.router.url === '/Home' || this.router.url === '/Home/';
     });
   }
 
