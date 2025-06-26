@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark px-3" [ngStyle]="{ 'background-color': theme.navbar }">
-  <a class="navbar-brand d-flex align-items-center" href="#">
+  <a class="navbar-brand d-flex align-items-center" href="/Home/dashboard">
     <img src="assets/Images/Logo (1).svg" alt="logo" class="navbar-logo me-2">
   </a>
 
@@ -14,16 +14,53 @@
       <div
         class="search-container"
         [class.expanded]="searchExpanded"
+        [class.loading]="isLoading"
         (click)="toggleSearch($event)"
       >
         <i class="bi bi-search search-icon"></i>
         <input
+          #searchInput
           type="text"
           class="search-input form-control"
-          placeholder="Recherche..."
+          placeholder="Recherche PV par titre..."
           [class.visible]="searchExpanded"
+          [(ngModel)]="searchTerm"
+          (input)="onSearchInput($event)"
           (click)="$event.stopPropagation()"
+          (keydown)="handleKeyDown($event)"
+          autocomplete="off"
         />
+        <!-- Search Results Dropdown -->
+        <div class="search-results" *ngIf="showResults && searchExpanded">
+          <!-- Loading State -->
+          <div *ngIf="isLoading" class="search-result-item text-muted">
+            <i class="bi bi-hourglass-split me-2"></i>
+            Recherche en cours...
+          </div>
+          <!-- Results -->
+          <div *ngIf="!isLoading && searchResults.length > 0">
+            <div 
+              class="search-result-item" 
+              *ngFor="let pv of searchResults; trackBy: trackByPvId"
+              (click)="goToPvDetail(pv.id, $event)"
+            >
+              <i class="bi bi-file-earmark-text me-2"></i>
+              <span>{{ pv.titreSceance }}</span>
+            </div>
+          </div>
+          <!-- No Results -->
+          <div *ngIf="!isLoading && searchResults.length === 0 && searchTerm.length >= 2" 
+               class="search-result-item text-muted">
+            <i class="bi bi-search me-2"></i>
+            Aucun PV trouvé pour "{{ searchTerm }}"
+          </div>
+          <!-- Help Text -->
+          <div *ngIf="!isLoading && searchTerm.length < 2 && searchTerm.length > 0" 
+               class="search-result-item text-muted">
+            <i class="bi bi-info-circle me-2"></i>
+            Tapez au moins 2 caractères pour rechercher
+          </div>
+        </div>
       </div>
       <div class="lang-switch" (click)="toggleLang()">
         <span [class.active]="currentLang === 'FR'">FR</span>
@@ -36,6 +73,7 @@
         class="help-btn"
         placement="bottom"
         ngbTooltip="Aide / Informations"
+        (click)="goToDocumentation()"
       >
         <i class="bi bi-question-circle"></i>
       </button>
