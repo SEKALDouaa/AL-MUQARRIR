@@ -45,6 +45,7 @@ children: [
 { path: 'pv/:id/view-transcription', loadComponent: () => import('./pages/view-transcription/view-transcription.component').then(m => m.ViewTranscriptionComponent) },
 { path: 'realtime-transcription/:id', loadComponent: () => import('./pages/realtime-transcription/realtime-transcription.component').then(m => m.RealtimeTranscriptionComponent) },
 { path: 'dashboard', loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent) },
+{ path: 'documentation', loadComponent: () => import('./pages/documentation/documentation.component').then(m => m.DocumentationComponent) },
 ]
 },
 

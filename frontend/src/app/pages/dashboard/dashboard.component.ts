@@ -97,4 +97,8 @@ export class DashboardComponent implements OnInit {
   contactSupport() {
     window.location.href = 'mailto:support@yourdomain.com';
   }
+
+  goToDocumentation() {
+    this.router.navigate(['/Home/documentation']);
+  }
 }
