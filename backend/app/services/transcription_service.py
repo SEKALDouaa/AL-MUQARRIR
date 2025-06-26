@@ -18,6 +18,7 @@ import markdown
 import markdown2
 from bs4 import BeautifulSoup
 from docx.shared import Pt
+import requests
 
 def create_transcription(data):
     data['dateSceance'] = datetime.strptime(data['dateSceance'], "%Y-%m-%d").date()
@@ -338,11 +339,65 @@ def export_transcription_analysis_arabe_docx(transcription_id):
         return None
 
     doc = Document()
+    from docx.shared import Pt
+    from bs4 import BeautifulSoup
+    import markdown2
+    from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+
     doc.add_paragraph("تحليل محضر الاجتماع", style='Title').alignment = WD_PARAGRAPH_ALIGNMENT.CENTER
 
-    p = doc.add_paragraph()
-    run = p.add_run(transcription.Analyse)
-    p.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+    def add_arabic_paragraph(text, bold=False, font_size=None):
+        p = doc.add_paragraph()
+        run = p.add_run(text)
+        if bold:
+            run.bold = True
+        if font_size:
+            run.font.size = font_size
+        p.alignment = WD_PARAGRAPH_ALIGNMENT.RIGHT
+        return p
+
+    # --- Markdown to HTML to DOCX ---
+    analyse_html = markdown2.markdown(
+        transcription.Analyse,
+        extras=["biblio", "fenced-code-blocks", "tables", "strike", "cuddled-lists", "footnotes"]
+    )
+    soup = BeautifulSoup(analyse_html, "html.parser")
+    for elem in soup.contents:
+        # Skip duplicate/unwanted section headers
+        if 'تحليل محضر الاجتماع' in elem.get_text():
+            continue
+        if elem.name == 'h1' or elem.name == 'h2' or elem.name == 'h3':
+            text = elem.get_text().strip()
+            if not text:
+                continue
+            add_arabic_paragraph(text, bold=True, font_size=Pt(18))
+        elif elem.name == 'p':
+            text = elem.get_text().strip()
+            if not text:
+                continue
+            add_arabic_paragraph(text, font_size=Pt(14))
+        elif elem.name == 'ul':
+            for li in elem.find_all('li'):
+                li_text = li.get_text().strip()
+                if not li_text:
+                    continue
+                add_arabic_paragraph(f"• {li_text}", font_size=Pt(14))
+        elif elem.name == 'ol':
+            for idx, li in enumerate(elem.find_all('li'), 1):
+                li_text = li.get_text().strip()
+                if not li_text:
+                    continue
+                add_arabic_paragraph(f"{idx}. {li_text}", font_size=Pt(14))
+        elif elem.name in ('strong', 'b'):
+            strong_text = elem.get_text().strip()
+            if not strong_text:
+                continue
+            add_arabic_paragraph(strong_text, bold=True, font_size=Pt(14))
+        elif elem.name is None:
+            plain_text = str(elem).strip()
+            if not plain_text:
+                continue
+            add_arabic_paragraph(plain_text, font_size=Pt(14))
 
     buffer = io.BytesIO()
     doc.save(buffer)
