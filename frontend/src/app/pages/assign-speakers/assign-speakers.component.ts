@@ -98,7 +98,26 @@ export class AssignSpeakersComponent implements OnInit {
   onEditTranscription() {
     if (this.pvId && !this.isSaving) {
       this.isSaving = true;
-      this.router.navigate(['/Home', 'pv', this.pvId, 'edit-transcription']);
+      // Remap the transcription array with real member names (same as onSaveMapping)
+      const remappedTranscription = this.transcription.map((seg: any) => {
+        const mapped = this.speakerMapping[seg.speaker];
+        return {
+          speaker: mapped ? mapped : seg.speaker,
+          text: seg.text
+        };
+      });
+      this.transcriptionService.updateTranscription(Number(this.pvId), {
+        Transcription: remappedTranscription
+      }).subscribe({
+        next: () => {
+          this.router.navigate(['/Home', 'pv', this.pvId, 'edit-transcription']);
+        },
+        error: (err) => {
+          this.isSaving = false;
+          // Optionally show an error message
+          console.error('Failed to update transcription before editing', err);
+        }
+      });
     }
   }
 
