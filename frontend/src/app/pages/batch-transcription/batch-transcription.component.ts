@@ -36,7 +36,6 @@ export class BatchTranscriptionComponent implements OnInit {
     this.transcriptionService.getNgrokUrl().subscribe({
       next: (res) => {
         this.ngrokUrl = res.ngrok_url;
-        console.log('Ngrok URL:', this.ngrokUrl); // Debug log
       },
       error: () => (this.status = 'Échec de la récupération de l’URL de l’API'),
     });

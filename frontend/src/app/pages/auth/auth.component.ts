@@ -59,11 +59,8 @@ constructor(
   onLogin() {
   this.authService.login(this.loginForm.value).subscribe({
     next: (res) => {
-      console.log('Login response:', res);
       this.storageService.set('access_token', res.access_token);
-      console.log('Token in sessionStorage now:', sessionStorage.getItem('access_token'));  // Should show token here
       const tokenFromService = this.storageService.get('access_token');
-      console.log('Token from service.get():', tokenFromService);  // Should also show token here
       this.router.navigate(['/Home/dashboard']);
     },
     error: (err) => {

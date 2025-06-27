@@ -183,7 +183,6 @@ export class RealtimeTranscriptionComponent implements OnInit, AfterViewInit, On
       const source = this.audioContext.createMediaStreamSource(stream);
       source.connect(this.analyser);
 
-      console.log('Audio processing setup complete');
     } catch (error) {
       console.error('Failed to setup audio processing:', error);
       throw error;
@@ -446,7 +445,7 @@ export class RealtimeTranscriptionComponent implements OnInit, AfterViewInit, On
       this.visualizerBars.push(bar);
     }
 
-    console.log(`Created ${this.visualizerBars.length} visualizer bars`);
+
   }
 
   private startVisualizer(): void {

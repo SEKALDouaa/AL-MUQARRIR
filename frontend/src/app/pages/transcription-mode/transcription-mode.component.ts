@@ -20,7 +20,6 @@ export class TranscriptionModeComponent implements OnInit {
   ngOnInit(): void {
     // This code runs when the component is initialized
     this.pvId = this.route.snapshot.paramMap.get('id');
-    console.log('PV ID from route:', this.pvId);
   }
 
   goToBatchTranscription() {
