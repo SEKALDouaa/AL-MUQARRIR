@@ -1,0 +1,3 @@
+[submodule "backend_AI_transcription/backend_AI_transcription"]
+	path = backend_AI_transcription/backend_AI_transcription
+	url = https://github.com/ZaaliMohamed123/Generative-AI-for-chat-transcription.git
