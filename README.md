@@ -10,8 +10,8 @@
 AL-MUQARRIR/
 ├── frontend/   # Angular web application (user interface)
 ├── backend/    # Flask API (Data management, export, user auth)
-├── backend_generative-AI-for-chat-transcription/ # AI models & audio processing
-└── README.md   # This file
+└── backend_generative-AI-for-chat-transcription/ # AI models & audio processing
+
 ```
 
 ---
