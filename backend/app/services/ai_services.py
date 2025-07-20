@@ -3,7 +3,7 @@ from decouple import config
 
 genai.configure(api_key=config("GEMINI_API_KEY"))
 
-model = genai.GenerativeModel("models/gemini-1.5-flash-latest")
+model = genai.GenerativeModel("models/gemini-2.5-flash-lite-preview-06-17")
 
 def generate_deroulement(texte_brut):
     prompt = f"""

@@ -61,7 +61,8 @@ export class BatchTranscriptionComponent implements OnInit {
     formData.append('file', this.form.value.file);
 
     try {
-      const response = await fetch(`${this.ngrokUrl}/process_audio`, {
+      //const response = await fetch(`${this.ngrokUrl}/process_audio`, {
+      const response = await fetch(`${this.ngrokUrl}/process_audio_translate_to_arabic`, {
         method: 'POST',
         body: formData,
       });
