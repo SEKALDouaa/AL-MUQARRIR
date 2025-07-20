@@ -26,7 +26,7 @@ def load_models():
     whisper_model = whisper.load_model("turbo")
 
     # Gemini--> refinement model
-    gemini_model_name = "gemini-2.5-flash-preview-04-17"
+    gemini_model_name = "gemini-2.5-flash-lite-preview-06-17"
     # gemini_model_name = "gemini-2.0-flash"
     genai.configure(api_key=GEMINI_API_KEY) # Pass your variable here
     gemini_model = genai.GenerativeModel(gemini_model_name)

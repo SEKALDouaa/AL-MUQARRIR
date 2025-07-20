@@ -461,6 +461,92 @@ def apply_speaker_reid_mapping(combined: list[dict], speaker_map: dict) -> list[
 
     return reid_combined
 
+"""## ── Arab translation ─────────────────────────────────"""
+
+def translate_text_to_arabic_with_gemini_api(text_segment: str, speaker_label: str, model: genai.GenerativeModel) -> str:
+    """
+    Translates a text segment into high-quality Modern Standard Arabic using the Gemini API.
+
+    This function is designed to handle inputs that may be in Moroccan Darija,
+    French, English, or a mix, and convert them into formal, grammatically
+    correct Arabic suitable for official records or summaries.
+
+    Args:
+        text_segment (str): The piece of text to be translated.
+        speaker_label (str): The label of the speaker (e.g., 'SPEAKER_01'), used for context in the prompt.
+        model (genai.GenerativeModel): An initialized instance of the Gemini generative model.
+
+    Returns:
+        str: The translated Arabic text. Returns the original text if an error occurs.
+    """
+    if not model or not text_segment or not text_segment.strip():
+        return text_segment
+
+    # A detailed, few-shot prompt for high-quality translation to Modern Standard Arabic (MSA).
+    prompt = f"""You are an expert AI translator specializing in converting conversational transcripts into formal, high-quality Modern Standard Arabic (الفصحى).
+The source text is from a conversation and can be in Moroccan Darija, French, English, or a mix of these languages.
+
+**CRITICAL INSTRUCTIONS:**
+1.  **TRANSLATE TO MODERN STANDARD ARABIC (MSA):** Your primary goal is to translate the meaning of the text into grammatically correct, clear, and formal MSA.
+2.  **PRESERVE MEANING:** Ensure the core meaning, intent, and nuances of the original text are accurately represented in the Arabic translation.
+3.  **FORMAL TONE:** The output should be formal and suitable for a professional summary or record. Avoid colloquialisms in the final Arabic output unless absolutely necessary to preserve a specific cultural meaning that has no formal equivalent.
+4.  **DO NOT ADD NEW INFO:** Do not add any information, opinions, or commentary that was not present in the original segment.
+5.  **OUTPUT ONLY THE TRANSLATION:** Your entire response must be ONLY the final Arabic text. Do not include any apologies, explanations, or introductory phrases like "Here is the translation:".
+
+**EXAMPLES OF DESIRED BEHAVIOR:**
+
+*   **Example 1 (Darija/French Mix):**
+    *   Source Text: "Bonjour khouya, ça va? أنا غاية دابا. On va commencer le travail."
+    *   Translated Arabic: "مرحباً يا أخي، كيف حالك؟ أنا بخير الآن. سوف نبدأ العمل."
+
+*   **Example 2 (Darija):**
+    *   Source Text: "السلام عليكم، لباس؟ اش خبارك؟ كلشي مزيان."
+    *   Translated Arabic: "السلام عليكم، هل أنت بخير؟ كيف أخبارك؟ كل شيء على ما يرام."
+
+*   **Example 3 (English):**
+    *   Source Text: "That's an excellent point. We should consider it for the next phase."
+    *   Translated Arabic: "تلك نقطة ممتازة. يجب أن نأخذها في الاعتبار للمرحلة التالية."
+
+*   **Example 4 (French):**
+    *   Source Text: "C'est une très bonne idée, merci."
+    *   Translated Arabic: "إنها فكرة جيدة جداً، شكراً لك."
+
+
+**TASK:**
+Now, apply these instructions to translate the following segment into Modern Standard Arabic.
+
+Speaker: {speaker_label}
+Source Text: "{text_segment}"
+
+Translated Arabic:
+"""
+
+    try:
+        # Safety settings can be adjusted if needed
+        response = model.generate_content(
+            prompt,
+            safety_settings=[
+                {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
+                {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
+                {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
+                {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
+            ]
+        )
+
+        # Unified way to access response text for different Gemini versions
+        if hasattr(response, 'text'):
+            translated_text = response.text
+        elif response.candidates and response.candidates[0].content and response.candidates[0].content.parts:
+            translated_text = "".join(part.text for part in response.candidates[0].content.parts)
+        else:
+            print("    Warning: Could not extract text from Gemini translation response.")
+            return text_segment # Fallback to original text
+
+        return translated_text.strip()
+    except Exception as e:
+        print(f"    Error during Gemini API translation call for '{text_segment[:50]}...': {e}")
+        return text_segment # Fallback to original text
+
 """### ── TOP‐LEVEL PIPELINES ───────────────────────────────────"""
 
 def process_entire_audio(input_audio_path: str, existing_db: dict, temp_dir: str = "/content/") -> dict:
@@ -560,3 +646,71 @@ def process_entire_audio_minimal_without_refinement(input_audio_path: str, exist
 
 
     return reid_combined
+
+
+def process_entire_audio_translate_to_arabe(input_audio_path: str, existing_db: dict, temp_dir: str = "/content/") -> list[dict]:
+    """
+    Processes an entire audio file by transcribing, refining, re-identifying speakers,
+    and finally, translating the entire dialogue into Modern Standard Arabic.
+
+    This pipeline performs the following steps:
+    1. Preprocesses the audio file.
+    2. Performs speaker diarization.
+    3. Transcribes the audio to text.
+    4. Combines diarization and transcription.
+    5. Refines the transcribed text for clarity and grammar using Gemini.
+    6. Extracts speaker embeddings for re-identification.
+    7. Re-identifies speakers against an existing database.
+    8. Maps the re-identified speakers to the refined dialogue.
+    9. Translates the final, refined dialogue into Arabic using Gemini.
+
+    Args:
+        input_audio_path (str): The path to the input audio file.
+        existing_db (dict): A dictionary database of known speaker embeddings.
+        temp_dir (str, optional): Directory for temporary processed files. Defaults to "/content/".
+
+    Returns:
+        list[dict]: A list of dictionaries, where each dictionary contains a
+                    re-identified speaker and their corresponding dialogue translated into Arabic.
+    """
+    # Steps 1-4: Preprocessing, Diarization, Transcription, and Combination
+    processed_wav = preprocess_audio_and_save(input_audio_path, output_dir=temp_dir)
+    diar = diarization_func(processed_wav, pipeline)
+    transcription = transcribe_audio(processed_wav, whisper_model)
+    combined = combine_diarization_transcription(diar, transcription)
+
+    # Step 5: Refinement with Gemini
+    refined_dialogue = process_refinement_with_gemini(combined, gemini_model)
+
+    # Steps 6-8: Speaker Re-identification
+    embeddings = extract_speaker_embeddings(diar, processed_wav)
+    speaker_map = reidentify_speakers(embeddings, existing_db, threshold=0.7)
+    reid_refined_dialogue = apply_speaker_reid_mapping(refined_dialogue, speaker_map)
+
+    # --- Step 9: New Translation Layer ---
+    translated_dialogue = []
+    if not gemini_model:
+        # If gemini model is not available, return the refined but untranslated text
+        print("Warning: Gemini model not available. Skipping translation.")
+        return reid_refined_dialogue
+
+    total_segments = len(reid_refined_dialogue)
+    # print(f"Starting translation of {total_segments} refined segments to Arabic...")
+
+    for i, entry in enumerate(reid_refined_dialogue):
+        if not entry:
+            continue
+
+        speaker_label, refined_text = list(entry.items())[0]
+
+        # Call the new translation function for each segment
+        translated_text = translate_text_to_arabic_with_gemini_api(
+            refined_text,
+            speaker_label,
+            gemini_model
+        )
+
+        translated_dialogue.append({speaker_label: translated_text})
+        # print(f"Translated segment {i+1}/{total_segments}") # For debugging
+
+    return translated_dialogue

@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import os
 import pickle
-from audioPipeline import process_entire_audio , process_entire_audio_minimal ,  process_entire_audio_without_refinement , process_entire_audio_minimal_without_refinement
+from audioPipeline import process_entire_audio , process_entire_audio_minimal ,  process_entire_audio_without_refinement , process_entire_audio_minimal_without_refinement, process_entire_audio_translate_to_arabe
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
@@ -21,6 +21,7 @@ def after_request(response):
 @app.route('/process_audio_chunk', methods=['OPTIONS'])
 @app.route('/process_audio_no_refine', methods=['OPTIONS'])
 @app.route('/process_audio_minimal_no_refine', methods=['OPTIONS'])
+@app.route('/process_audio_translate_to_arabic', methods=['OPTIONS'])
 @app.route('/health', methods=['OPTIONS'])
 def handle_options():
     return '', 200
@@ -204,7 +205,51 @@ def process_audio_minimal_no_refine():
         print("Error in /process_audio_minimal_no_refine:", traceback.format_exc())
         return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
 
-# ── (G) Health check endpoint ────────────────────────────────
+# ── (G) Full-file processing with translation to Arabic ─────────────
+@app.route("/process_audio_translate_to_arabic", methods=["POST"])
+def process_audio_translate_to_arabic():
+    """
+    Expects multipart/form-data with a file field named 'file'.
+    Processes the audio, refines the transcription, re-identifies speakers,
+    and translates the final result to Modern Standard Arabic.
+    Returns a JSON payload with the final translated dialogue.
+    """
+    global existing_db
+    if "file" not in request.files:
+        return jsonify({"error": "No file part"}), 400
+    
+    file = request.files["file"]
+    if file.filename == "":
+        return jsonify({"error": "No selected file"}), 400
+
+    # 1) Save the uploaded file to a secure location
+    save_path = os.path.join(UPLOADS_DIR, file.filename)
+    file.save(save_path)
+
+    try:
+        # 2) Run the full pipeline that includes the final Arabic translation step.
+        # This function updates the 'existing_db' in memory via speaker re-identification.
+        translated_result = process_entire_audio_translate_to_arabe(
+            save_path, existing_db, temp_dir=UPLOADS_DIR
+        )
+
+        # 3) Persist the updated speaker database to the pickle file
+        with open(DB_PATH, "wb") as f:
+            pickle.dump(existing_db, f)
+
+        # 4) Build the final JSON response
+        payload = {
+            "result": translated_result
+        }
+        return jsonify(payload), 200
+
+    except Exception as e:
+        import traceback
+        # Log the full error for debugging purposes
+        print(f"Error in /process_audio_translate_to_arabic: {traceback.format_exc()}")
+        return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
+
+# ── (H) Health check endpoint ────────────────────────────────
 @app.route("/health", methods=["GET"])
 def health_check():
     return jsonify({"status": "ok"}), 200
